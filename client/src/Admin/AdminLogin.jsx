@@ -1,22 +1,42 @@
+import React, { useState } from "react";
 import io from "socket.io-client";
 
 export default function AdminLogin() {
-  function login() {
+  const [email, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  function registerAdmin() {
     const socket = io.connect("http://localhost:3001");
-    socket.emit("login", {
-      name: "admin",
-      email: "admin@gmail.com",
-      password: "admin",
+    socket.emit("register_admin", {
+      nom: "admin",
+      prenom: "admin",
+      email: email,
+      password: password,
+    });
+    socket.on("register_admin_success", (data) => {
+      console.log(data);
+    });
+    socket.on("register_admin_error", (data) => {
+      console.log(data);
     });
   }
+
   return (
     <div>
-      <form>
-        <h1>Admin Login</h1>
-        <input type="text" placeholder="Username" />
-        <input type="password" placeholder="Password" />
-        <button onClick={login}>Login</button>
-      </form>
+      <h1>Admin Registration</h1>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={registerAdmin}>Register</button>
     </div>
   );
 }
