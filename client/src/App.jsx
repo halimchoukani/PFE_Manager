@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AdminHome from "./Admin/AdminHome";
+import AdminLogin from "./Admin/AdminLogin";
 import io from "socket.io-client";
 const socket = io.connect("http://localhost:3001");
 function App() {
@@ -11,7 +12,7 @@ function App() {
 
   return (
     <>
-      <AdminHome />
+      <AdminLogin />
     </>
   );
 }

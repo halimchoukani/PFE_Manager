@@ -17,7 +17,6 @@ io.on("connection", (socket) => {
   console.log("User connected", socket.id);
   socket.on("login", (data) => {
     user = new Admin(data);
-    console.log(user);
   });
   socket.on("disconnect", () => {
     console.log("User disconnected", socket.id);
