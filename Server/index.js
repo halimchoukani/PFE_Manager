@@ -14,7 +14,12 @@ const encadrantApi = require("./routes/encadrant");
 const etudiantApi = require("./routes/etudiant");
 // Set up CORS
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Set up MongoDB connection
 mongoose.connect("mongodb://localhost:27017/PFE-Manager", {

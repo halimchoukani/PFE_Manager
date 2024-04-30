@@ -45,13 +45,17 @@ router.post("/login", async (req, res) => {
 
 //Register
 router.post("/register", async (req, res) => {
-  const { nom, prenom, email, password } = req.body;
+  const { cin, nom, prenom, email, password } = req.body;
   try {
     const existingUser = await Admin.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email deja exist !!" });
     }
+    if (await Admin.findOne({ cin })) {
+      return res.status(400).json({ message: "CIN deja exist !!" });
+    }
     const newUser = new Admin({
+      cin,
       nom,
       prenom,
       email,
