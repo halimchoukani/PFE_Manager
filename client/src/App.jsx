@@ -2,6 +2,7 @@ import { useState } from "react";
 import AdminHome from "./Admin/AdminHome";
 import AdminLogin from "./Admin/AdminLogin";
 import io from "socket.io-client";
+import('tailwindcss').Config
 const socket = io.connect("http://localhost:3001");
 function App() {
   const [count, setCount] = useState(0);
