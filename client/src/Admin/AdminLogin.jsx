@@ -44,6 +44,8 @@ export default function AdminLogin() {
               <div className="mt-2">
                 <input
                   id="email"
+                  value={email}
+                  onChange={(e) => setUsername(e.target.value)}
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -68,6 +70,8 @@ export default function AdminLogin() {
                 <input
                   id="password"
                   name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   autoComplete="current-password"
                   required
