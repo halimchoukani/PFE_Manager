@@ -2,7 +2,8 @@ import { useState } from "react";
 import AdminHome from "./Admin/AdminHome";
 import AdminLogin from "./Admin/AdminLogin";
 import io from "socket.io-client";
-import('tailwindcss').Config
+import "./index.css";
+
 const socket = io.connect("http://localhost:3001");
 function App() {
   const [count, setCount] = useState(0);
@@ -11,11 +12,14 @@ function App() {
     console.log("connected");
   });
 
-  return (
-    <>
-      <AdminLogin />
-    </>
-  );
+
+    return (
+      <>
+      <AdminLogin/>
+      
+      </>
+    )
+  
 }
 
 export default App;
