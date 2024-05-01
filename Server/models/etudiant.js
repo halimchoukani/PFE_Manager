@@ -7,6 +7,11 @@ const etudiantSchema = new Schema({
   email: String,
   password: String,
   fichier: String,
+  status: {
+    type: String,
+    enum: ["Activé", "Disactivé"],
+    default: "Activé",
+  },
   room: String,
 });
 const Etudiant = mongoose.model("Etudiant", etudiantSchema);
