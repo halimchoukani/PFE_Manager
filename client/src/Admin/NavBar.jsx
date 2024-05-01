@@ -20,7 +20,7 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-
+import { Link } from "react-router-dom";
 export default function SideHeader() {
   const [open, setOpen] = React.useState(0);
 
@@ -36,21 +36,23 @@ export default function SideHeader() {
         </Typography>
       </div>
       <List>
-        <ListItem>
-          <ListItemPrefix>
-            <InboxIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Dashboard
-          <ListItemSuffix>
-            <Chip
-              value="0"
-              size="sm"
-              variant="ghost"
-              color="blue-gray"
-              className="rounded-full"
-            />
-          </ListItemSuffix>
-        </ListItem>
+        <Link to="/admin" className="">
+          <ListItem>
+            <ListItemPrefix>
+              <InboxIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Dashboard
+            <ListItemSuffix>
+              <Chip
+                value="0"
+                size="sm"
+                variant="ghost"
+                color="blue-gray"
+                className="rounded-full"
+              />
+            </ListItemSuffix>
+          </ListItem>
+        </Link>
         <Accordion
           open={open === 2}
           icon={
@@ -62,40 +64,49 @@ export default function SideHeader() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 2}>
-            <AccordionHeader
-              onClick={() => handleOpen(2)}
-              className="border-b-0 p-3"
-            >
-              <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <Typography color="blue-gray" className="mr-auto font-normal">
-                Comptes
-              </Typography>
-            </AccordionHeader>
-          </ListItem>
+          <Link to="/admin/comptes">
+            <ListItem className="p-0" selected={open === 2}>
+              <AccordionHeader
+                onClick={() => handleOpen(2)}
+                className="border-b-0 p-3"
+              >
+                <ListItemPrefix>
+                  <ShoppingBagIcon className="h-5 w-5" />
+                </ListItemPrefix>
+                <Typography color="blue-gray" className="mr-auto font-normal">
+                  Comptes
+                </Typography>
+              </AccordionHeader>
+            </ListItem>
+          </Link>
+
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Etudiant
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Encadrant
-              </ListItem>
+              <Link to="comptes/etudiant">
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Etudiant
+                </ListItem>
+              </Link>
+              <Link to="comptes/encadrant">
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Encadrant
+                </ListItem>
+              </Link>
               <hr className="my-2 border-blue-gray-50" />
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Admin
-              </ListItem>
+              <Link to="comptes/admin">
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Admin
+                </ListItem>
+              </Link>
             </List>
           </AccordionBody>
         </Accordion>
@@ -111,33 +122,39 @@ export default function SideHeader() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 3}>
-            <AccordionHeader
-              onClick={() => handleOpen(3)}
-              className="border-b-0 p-3"
-            >
-              <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <Typography color="blue-gray" className="mr-auto font-normal">
-                Stages
-              </Typography>
-            </AccordionHeader>
-          </ListItem>
+          <Link to="/admin/stages">
+            <ListItem className="p-0" selected={open === 3}>
+              <AccordionHeader
+                onClick={() => handleOpen(3)}
+                className="border-b-0 p-3"
+              >
+                <ListItemPrefix>
+                  <ShoppingBagIcon className="h-5 w-5" />
+                </ListItemPrefix>
+                <Typography color="blue-gray" className="mr-auto font-normal">
+                  Stages
+                </Typography>
+              </AccordionHeader>
+            </ListItem>
+          </Link>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Verifiée
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                En Cours
-              </ListItem>
+              <Link to="stages/verifie">
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Verifiée
+                </ListItem>
+              </Link>
+              <Link to="stages/encours">
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  En Cours
+                </ListItem>
+              </Link>
             </List>
           </AccordionBody>
         </Accordion>
