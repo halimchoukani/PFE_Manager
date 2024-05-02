@@ -26,8 +26,10 @@ export function FormulaireStage() {
   const [FichierStage, setFichierStage] = useState("");
   const [check, setCheck] = useState(true);
   const [error, setError] = useState(false);
+  const [cinerror, setCinError] = useState(false);
   function AjouterStage(ev) {
     ev.preventDefault();
+    console.log(Binome);
     if (check) {
     } else {
       setError(true);
@@ -49,24 +51,43 @@ export function FormulaireStage() {
         >
           <div className="mx-auto mb-1 flex flex-row justify-center items-center gap-6 w-full">
             <div className="w-full flex flex-col gap-4">
-              <Input type="text" value={CIN} size="lg" label="Votre CIN" />
+              <Input
+                type="text"
+                label="Votre CIN"
+                id="cin"
+                value={CIN}
+                onChange={(e) => {
+                  if (e.target.value.length <= 8) {
+                    setCinError(false);
+                    setCIN(e.target.value);
+                  }
+                  if (isNaN(e.target.value)) {
+                    setCinError(true);
+                    setCIN(e.target.value.slice(0, -1));
+                  }
+                }}
+                error={cinerror}
+                name="cin"
+                autoComplete="cin"
+                required
+                size="lg"
+              />
               <Input type="text" size="lg" label="Votre Nom" />
               <Input type="text" size="lg" label="Votre Prénom" />
               <Input type="email" size="lg" label="Votre  " />
               <div className="w-full">
-                <Select
-                  label="Selectionnez votre binome"
-                  animate={{
-                    mount: { y: 0 },
-                    unmount: { y: 25 },
-                  }}
+                <select
+                  id="countries"
+                  class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
-                </Select>
+                  <option disabled selected>
+                    Choose a country
+                  </option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="FR">France</option>
+                  <option value="DE">Germany</option>
+                </select>
               </div>
               <Input type="email" size="lg" label="Email de votre binome" />
               <Textarea
@@ -80,19 +101,18 @@ export function FormulaireStage() {
             </div>
             <div className="w-full flex flex-col gap-4">
               <div className="w-full">
-                <Select
-                  label="Selectionnez votre encadrant de l'iset"
-                  animate={{
-                    mount: { y: 0 },
-                    unmount: { y: 25 },
-                  }}
+                <select
+                  id="countries"
+                  class="bg-gray-50 border border-gray-500  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
-                </Select>
+                  <option disabled selected>
+                    Choose a country
+                  </option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="FR">France</option>
+                  <option value="DE">Germany</option>
+                </select>
               </div>
               <Input type="text" size="lg" label="Nom de votre société" />
               <Input type="text" size="lg" label="Encadrant de votre société" />
