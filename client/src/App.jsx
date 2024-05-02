@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Form } from "react-router-dom";
 import { useState } from "react";
 import AdminHome from "./Admin/AdminHome";
 import AdminLogin from "./Admin/AdminLogin";
@@ -8,7 +8,7 @@ import "./index.css";
 import EtudiantLogin from "./Etudiant/EtudiantLogin";
 import EtudiantRegister from "./Etudiant/EtudiantRegister";
 import { Acceuil } from "./Acceuil";
-
+import { FormulaireStage } from "./Etudiant/FormulaireStage";
 const socket = io.connect("http://localhost:3001");
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
         <Route path="/*" element={<AdminHome />} />
         <Route path="/" element={<Acceuil />} />
         <Route path="/etudiant/register" element={<EtudiantRegister />} />
+        <Route path="/etudiant" element={<FormulaireStage />} />
         <Route path="/etudiant/login" element={<EtudiantLogin />} />
         <Route path="/register" element={<AdminRegister />} />
       </Routes>
