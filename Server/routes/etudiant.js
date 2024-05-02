@@ -27,9 +27,13 @@ const upload = multer({
 // Register Etudiant
 router.post("/register", async (req, res) => {
   try {
-    const { nom, prenom, cin, email, password, room } = req.body;
-    const exist = CIN.findOne({ cin: cin });
+    const { nom, prenom, cin, email, password } = req.body;
+    const exist = CIN.findOne({ cin });
     if (exist) {
+      const cinexists = await Etudiant.findOne({ cin: cin });
+      if (cinexists) {
+        return res.status(400).send("CIN deja existe");
+      }
       const existingEtudiant = await Etudiant.findOne({ email });
       if (existingEtudiant) {
         return res.status(400).send("email deja existe");
@@ -41,7 +45,7 @@ router.post("/register", async (req, res) => {
         cin,
         email,
         password: hashedPassword,
-        room,
+        room: "A1",
       });
       await etudiant.save();
       res.status(201).send(etudiant);

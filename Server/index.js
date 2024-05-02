@@ -68,6 +68,7 @@ io.on("connection", (socket) => {
 });
 app.use("/admin", adminApi);
 app.use("/encadrant", encadrantApi);
+app.use("/etudiant", etudiantApi);
 server.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
