@@ -410,6 +410,14 @@ export function Acceuil() {
           </div>
         </form>
       </div>
+      <footer className="flex w-full flex-row flex-wrap items-center  -center gap-y-6 gap-x-12 border-t border-blue-gray-50 py-6 text-center md:justify-between">
+        <Typography
+          color="blue-gray"
+          className="w-full font-normal text-center"
+        >
+          &copy; 2024 Choukani Halim et Med Hedi Bejaoui
+        </Typography>
+      </footer>
     </div>
   );
 }
