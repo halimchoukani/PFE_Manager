@@ -1,4 +1,7 @@
 import { React, useState, createElement, Fragment } from "react";
+import { Dialog } from "@headlessui/react";
+import { Link } from "react-router-dom";
+
 import {
   Navbar,
   Collapse,
@@ -16,6 +19,7 @@ import {
   CardBody,
   CardFooter,
   Input,
+  Textarea,
 } from "@material-tailwind/react";
 import {
   ChevronDownIcon,
@@ -42,16 +46,19 @@ const navListMenuItems = [
   {
     title: "Etudiant",
     description: "Connexion qu'aux étudiants",
+    link: "/etudiant/login",
     icon: SquaresPlusIcon,
   },
   {
     title: "Encadrant",
     description: "Connexion qu'aux encadrants",
+    link: "/etudiant/login",
     icon: UserGroupIcon,
   },
   {
     title: "Admin",
     description: "Connexion qu'aux admins",
+    link: "/etudiant/login",
     icon: Bars4Icon,
   },
 ];
@@ -59,8 +66,8 @@ function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const renderItems = navListMenuItems.map(
-    ({ icon, title, description }, key) => (
-      <a href="#" key={key}>
+    ({ icon, title, description, link }, key) => (
+      <Link to={link} key={key}>
         <MenuItem className="flex items-center gap-3 rounded-lg">
           <div className="flex items-center justify-center rounded-sm !bg-blue-gray-50 p-2  ">
             {" "}
@@ -85,7 +92,7 @@ function NavListMenu() {
             </Typography>
           </div>
         </MenuItem>
-      </a>
+      </Link>
     )
   );
 
@@ -132,8 +139,6 @@ function NavListMenu() {
     </Fragment>
   );
 }
-
-import { Dialog } from "@headlessui/react";
 const features = [
   {
     name: "Intégration des Notifications par E-mail",
@@ -353,69 +358,46 @@ export function Acceuil() {
         >
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
             <div>
-              <label
-                htmlFor="first-name"
-                className="block text-sm font-semibold leading-6 text-gray-900"
-              >
-                Nom
-              </label>
               <div className="mt-2.5">
-                <input
+                <Input
                   type="text"
                   name="first-name"
                   id="first-name"
                   autoComplete="given-name"
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  label="Nom"
                 />
               </div>
             </div>
             <div>
-              <label
-                htmlFor="last-name"
-                className="block text-sm font-semibold leading-6 text-gray-900"
-              >
-                Prenom
-              </label>
               <div className="mt-2.5">
-                <input
+                <Input
                   type="text"
                   name="last-name"
                   id="last-name"
                   autoComplete="family-name"
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  label="Prénom"
                 />
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold leading-6 text-gray-900"
-              >
-                Adresse mail
-              </label>
               <div className="mt-2.5">
-                <input
+                <Input
                   type="email"
                   name="email"
                   id="email"
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  label="Adresse Mail"
                 />
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label
-                htmlFor="message"
-                className="block text-sm font-semibold leading-6 text-gray-900"
-              >
-                Message
-              </label>
               <div className="mt-2.5">
-                <textarea
+                <Textarea
+                  type="textarea"
                   name="message"
                   id="message"
                   rows={4}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  label="Message"
                   defaultValue={""}
                 />
               </div>

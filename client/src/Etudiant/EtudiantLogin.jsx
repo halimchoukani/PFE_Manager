@@ -10,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { HomeLink } from "../HomeLink";
 export default function EtudiantLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +42,7 @@ export default function EtudiantLogin() {
   }
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div className="w-full h-screen flex justify-center items-center flex-col">
       <Card className="w-96">
         <CardHeader
           variant="gradient"
@@ -94,6 +95,7 @@ export default function EtudiantLogin() {
               Enregistrer
             </Link>
           </Typography>
+          <HomeLink />
         </CardFooter>
       </Card>
     </div>

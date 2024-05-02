@@ -12,6 +12,7 @@ import {
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { HomeLink } from "../HomeLink";
 
 export default function EtudiantRegister() {
   const [email, setEmail] = useState("");
@@ -176,6 +177,7 @@ export default function EtudiantRegister() {
                 Authentifier
               </Link>
             </Typography>
+            <HomeLink />
           </CardFooter>
         </Card>
       </form>
