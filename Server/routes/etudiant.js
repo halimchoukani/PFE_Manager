@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const Etudiant = require("../models/etudiant");
-const CIN = require("../models/cin");
+const CINS = require("../models/cin");
 const secretKey = "gozgjzgpojzrpojz";
 const Stage = require("../models/stage");
 // Multer configuration
@@ -28,33 +28,48 @@ const upload = multer({
 router.post("/register", async (req, res) => {
   try {
     const { nom, prenom, cin, email, password } = req.body;
-    const exist = CIN.findOne({ cin });
-    if (exist) {
-      const cinexists = await Etudiant.findOne({ cin: cin });
-      if (cinexists) {
-        return res.status(400).send("CIN deja existe");
-      }
-      const existingEtudiant = await Etudiant.findOne({ email });
-      if (existingEtudiant) {
-        return res.status(400).send("email deja existe");
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const etudiant = new Etudiant({
-        nom,
-        prenom,
-        cin,
-        email,
-        password: hashedPassword,
-        room: "A1",
-      });
-      await etudiant.save();
-      res.status(201).send(etudiant);
-    } else {
-      res
+
+    // Check if CIN exists
+    const exist = await CINS.findOne({ cin });
+    if (!exist) {
+      return res
         .status(404)
-        .send("Vous n'avez pas l'access a cette platform , contacter l'admin");
+        .send(
+          "Vous n'avez pas l'accès à cette plateforme, veuillez contacter l'administrateur."
+        );
     }
+
+    // Check if CIN already exists
+    const cinExists = await Etudiant.findOne({ cin });
+    if (cinExists) {
+      return res.status(400).send("CIN déjà existant.");
+    }
+
+    // Check if email already exists
+    const emailExists = await Etudiant.findOne({ email });
+    if (emailExists) {
+      return res.status(400).send("Email déjà existant.");
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new Etudiant document
+    const etudiant = new Etudiant({
+      nom,
+      prenom,
+      cin,
+      email,
+      password: hashedPassword,
+      room: "A1",
+    });
+    // Save the new Etudiant document to the database
+    await etudiant.save();
+    await CINS.findOneAndUpdate({ cin }, { isRegistred: true });
+    // Send a success response with the created Etudiant document
+    res.status(201).send(etudiant);
   } catch (error) {
+    // Handle any errors that occur during registration
     res.status(500).send(error.message);
   }
 });

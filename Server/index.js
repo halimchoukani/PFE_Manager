@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const salt = bcrypt.genSaltSync(10);
-
+const cinApi = require("./routes/cin");
 const adminApi = require("./routes/admin");
 const encadrantApi = require("./routes/encadrant");
 const etudiantApi = require("./routes/etudiant");
@@ -69,6 +69,7 @@ io.on("connection", (socket) => {
 app.use("/admin", adminApi);
 app.use("/encadrant", encadrantApi);
 app.use("/etudiant", etudiantApi);
+app.use("/cin", cinApi);
 server.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
