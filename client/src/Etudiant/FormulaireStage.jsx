@@ -9,9 +9,29 @@ import {
   Option,
   Textarea,
 } from "@material-tailwind/react";
+import { useState } from "react";
+
 export function FormulaireStage() {
+  const [CIN, setCIN] = useState("");
+  const [Nom, setNom] = useState("");
+  const [Prenom, setPrenom] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Binome, setBinome] = useState("");
+  const [EmailBinome, setEmailBinome] = useState("");
+  const [Sujet, setSujet] = useState("");
+  const [EncadrantIset, setEncadrantIset] = useState("");
+  const [NomSociete, setNomSociete] = useState("");
+  const [EncadrantSociete, setEncadrantSociete] = useState("");
+  const [EmailSociete, setEmailSociete] = useState("");
+  const [FichierStage, setFichierStage] = useState("");
+  const [check, setCheck] = useState(true);
+  const [error, setError] = useState(false);
   function AjouterStage(ev) {
     ev.preventDefault();
+    if (check) {
+    } else {
+      setError(true);
+    }
   }
 
   return (
@@ -23,10 +43,13 @@ export function FormulaireStage() {
         <Typography color="gray" className="mt-1 font-normal">
           Remplissez les informations de votre stage correctement
         </Typography>
-        <form className="mt-8 mb-2 w-10/12 flex flex-col justify-between items-center">
+        <form
+          className="mt-8 mb-2 w-10/12 flex flex-col justify-between items-center"
+          onSubmit={AjouterStage}
+        >
           <div className="mx-auto mb-1 flex flex-row justify-center items-center gap-6 w-full">
             <div className="w-full flex flex-col gap-4">
-              <Input type="text" size="lg" label="Votre CIN" />
+              <Input type="text" value={CIN} size="lg" label="Votre CIN" />
               <Input type="text" size="lg" label="Votre Nom" />
               <Input type="text" size="lg" label="Votre Prénom" />
               <Input type="email" size="lg" label="Votre  " />
@@ -109,10 +132,16 @@ export function FormulaireStage() {
             </div>
           </div>
           <Checkbox
+            checked={check}
+            onClick={(e) => {
+              !check ? setError(false) : setError(true);
+              setCheck(e.target.checked);
+              console.log(check);
+            }}
             label={
               <Typography
                 variant="small"
-                color="gray"
+                color={!error ? "gray" : "red"}
                 className="flex items-center font-normal"
               >
                 J'ai submiter mon informati on correctement
@@ -120,7 +149,7 @@ export function FormulaireStage() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
+          <Button type="submit" className="mt-6" fullWidth>
             Submit
           </Button>
         </form>
