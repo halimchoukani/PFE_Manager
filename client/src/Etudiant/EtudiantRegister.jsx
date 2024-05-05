@@ -23,13 +23,14 @@ export default function EtudiantRegister() {
   const [cin, setCin] = useState("");
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
+  const [classe, setClasse] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [cinerror, setCinError] = useState(false);
   const [error, setError] = useState(false);
   async function Register(ev) {
     ev.preventDefault();
-    const responce = await fetch("http://localhost:3001/admin/login", {
+    const responce = await fetch("http://localhost:3001/etudiant/register", {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -126,9 +127,30 @@ export default function EtudiantRegister() {
                 }}
                 required
               >
-                <Option value="L3-DSI 1">L3-DSI 1</Option>
-                <Option value="L3-DSI 2">L3-DSI 2</Option>
-                <Option value="L3-DSI 3">L3-DSI 3</Option>
+                <Option
+                  value="L3-DSI 1"
+                  onClick={(e) => {
+                    setClasse("L3-DSI 1");
+                  }}
+                >
+                  L3-DSI 1
+                </Option>
+                <Option
+                  onClick={(e) => {
+                    setClasse("L3-DSI 2");
+                  }}
+                  value="L3-DSI 2"
+                >
+                  L3-DSI 2
+                </Option>
+                <Option
+                  onClick={(e) => {
+                    setClasse("L3-DSI 3");
+                  }}
+                  value="L3-DSI 3"
+                >
+                  L3-DSI 3
+                </Option>
               </Select>
             </div>
             <Input
@@ -168,7 +190,12 @@ export default function EtudiantRegister() {
             />
           </CardBody>
           <CardFooter className="pt-0">
-            <Button variant="gradient" fullWidth type="submit">
+            <Button
+              variant="gradient"
+              fullWidth
+              type="submit"
+              onClick={console.log(classe)}
+            >
               Enregistrer
             </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
