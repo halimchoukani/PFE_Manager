@@ -1,5 +1,4 @@
 import { Routes, Route, Form } from "react-router-dom";
-import { useState } from "react";
 import AdminHome from "./Admin/AdminHome";
 import AdminLogin from "./Admin/AdminLogin";
 import AdminRegister from "./Admin/AdminRegister";
@@ -12,8 +11,6 @@ import { FormulaireStage } from "./Etudiant/FormulaireStage";
 const socket = io.connect("http://localhost:3001");
 
 function App() {
-  const [count, setCount] = useState(0);
-
   socket.on("connect", () => {
     console.log("connected");
   });
@@ -23,10 +20,11 @@ function App() {
       <Routes>
         <Route path="/*" element={<AdminHome />} />
         <Route path="/" element={<Acceuil />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
         <Route path="/etudiant/register" element={<EtudiantRegister />} />
         <Route path="/etudiant" element={<FormulaireStage />} />
         <Route path="/etudiant/login" element={<EtudiantLogin />} />
-        <Route path="/register" element={<AdminRegister />} />
       </Routes>
     </>
   );
