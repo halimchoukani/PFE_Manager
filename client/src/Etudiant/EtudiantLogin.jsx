@@ -18,7 +18,7 @@ export default function EtudiantLogin() {
   const [error, setError] = useState("");
   async function login(ev) {
     ev.preventDefault();
-    const responce = await fetch("http://localhost:3001/admin/login", {
+    const responce = await fetch("http://localhost:3001/etudiant/login", {
       method: "POST",
       body: JSON.stringify({
         email,
