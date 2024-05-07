@@ -65,6 +65,10 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
+  socket.on("getStudents", async (callback) => {
+    const students = await Etudiant.find({});
+    callback(students);
+  });
 });
 app.use("/admin", adminApi);
 app.use("/encadrant", encadrantApi);

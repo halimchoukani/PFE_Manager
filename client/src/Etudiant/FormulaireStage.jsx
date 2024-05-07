@@ -9,7 +9,9 @@ import {
   Option,
   Textarea,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+const Socket = io.connect("http://localhost:3001");
 
 export function FormulaireStage() {
   const [CIN, setCIN] = useState("");
@@ -27,6 +29,7 @@ export function FormulaireStage() {
   const [check, setCheck] = useState(true);
   const [error, setError] = useState(false);
   const [cinerror, setCinError] = useState(false);
+  const [students, setStudents] = useState([]);
   function AjouterStage(ev) {
     ev.preventDefault();
     console.log(Binome);
@@ -36,6 +39,15 @@ export function FormulaireStage() {
     }
   }
 
+  function getStudents() {
+    Socket.emit("getStudents", (students) => {
+      setStudents(students);
+    });
+  }
+  useEffect(() => {
+    getStudents();
+    console.log(students);
+  }, [Socket, students]);
   return (
     <div className=" absolute w-screen h-screen">
       <Card className="w-full p-5 flex flex-col justify-center items-center">
@@ -74,20 +86,21 @@ export function FormulaireStage() {
               />
               <Input type="text" size="lg" label="Votre Nom" />
               <Input type="text" size="lg" label="Votre Prénom" />
-              <Input type="email" size="lg" label="Votre  " />
+              <Input type="email" size="lg" label="Votre Adresse Mail" />
               <div className="w-full">
-                <select
-                  id="countries"
-                  class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                <Select
+                  label="Selection Votre Binome"
+                  animate={{
+                    mount: { y: 0 },
+                    unmount: { y: 25 },
+                  }}
                 >
-                  <option disabled selected>
-                    Choose a country
-                  </option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select>
+                  {students.map((student) => (
+                    <Option key={student._id}>
+                      {student.cin + " " + student.nom + " " + student.prenom}
+                    </Option>
+                  ))}
+                </Select>
               </div>
               <Input type="email" size="lg" label="Email de votre binome" />
               <Textarea
@@ -101,18 +114,19 @@ export function FormulaireStage() {
             </div>
             <div className="w-full flex flex-col gap-4">
               <div className="w-full">
-                <select
-                  id="countries"
-                  class="bg-gray-50 border border-gray-500  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                <Select
+                  label="Select Version"
+                  animate={{
+                    mount: { y: 0 },
+                    unmount: { y: 25 },
+                  }}
                 >
-                  <option disabled selected>
-                    Choose a country
-                  </option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select>
+                  <Option>Material Tailwind HTML</Option>
+                  <Option>Material Tailwind React</Option>
+                  <Option>Material Tailwind Vue</Option>
+                  <Option>Material Tailwind Angular</Option>
+                  <Option>Material Tailwind Svelte</Option>
+                </Select>
               </div>
               <Input type="text" size="lg" label="Nom de votre société" />
               <Input type="text" size="lg" label="Encadrant de votre société" />
