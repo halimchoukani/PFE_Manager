@@ -23,10 +23,11 @@ function App() {
       <Routes>
         <Route path="/*" element={<AdminHome />} />
         <Route path="/" element={<Acceuil />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
         <Route path="/etudiant/register" element={<EtudiantRegister />} />
         <Route path="/etudiant" element={<FormulaireStage />} />
         <Route path="/etudiant/login" element={<EtudiantLogin />} />
-        <Route path="/register" element={<AdminRegister />} />
       </Routes>
     </>
   );
