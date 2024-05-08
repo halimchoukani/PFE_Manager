@@ -22,10 +22,10 @@ app.use(
 );
 
 // Set up MongoDB connection
-mongoose.connect("mongodb://localhost:27017/PFE-Manager", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://isetrades:pi2024@pfemanger.rfwett7.mongodb.net/?retryWrites=true&w=majority&appName=pfeManger"
+);
+
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => {
