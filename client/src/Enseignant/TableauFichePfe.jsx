@@ -1,35 +1,59 @@
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Typography,
-  Input,
-  Checkbox,
-  Select,
-  Option,
-  Button,
 } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+
 const Socket = io.connect("http://localhost:3001");
 
 const TableauFichePfe = () => {
   const [data, setData] = useState(null);
   const teacherId = "12345678";
+  async function getPDF(name, cin) {
+    await fetch(`http://localhost:3001/getfile/${cin}`).then((response) => {
+      response.blob().then((blob) => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = name + ".pdf";
+        a.click();
+      });
+    });
+  }
   function getStage() {
     Socket.emit("getTeachersStage", teacherId, (data) => {
       setData(data);
     });
   }
+
+  function downloadFile(pdf, name) {
+    // Assuming pdf.etudiantFichier is the ArrayBuffer
+    const arrayBuffer = pdf.etudiantFichier;
+
+    // Create a Blob from the ArrayBuffer
+    const blob = new Blob([arrayBuffer], { type: "application/pdf" });
+
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element
+    const downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = name; // Specify the desired filename
+    downloadLink.textContent = "Download File";
+
+    // Trigger the download
+    downloadLink.click();
+    URL.revokeObjectURL(url);
+  }
+
   useEffect(() => {
     getStage();
-  }, [Socket, data]);
-  const dataArray = [
-    { id: 1, name: "John Doe", age: 25 },
-    { id: 2, name: "Jane Smith", age: 30 },
-    { id: 3, name: "Bob Johnson", age: 35 },
-  ];
+  }, []); // Run once on component mount
+
   return (
     <Card>
       <CardHeader>
@@ -42,26 +66,31 @@ const TableauFichePfe = () => {
               <tr>
                 <th>Etudiant</th>
                 <th>Binome</th>
-                <th>nom_entreprise </th>
+                <th>nom_entreprise</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
                 <tr key={item._id}>
-                  <td>{item.etudiant}</td>
-                  <td>{item.Binome}</td>
-                  <td>{item.nom_entreprise}</td>
+                  <td>{item.etudiantNom + " " + item.etudiantPrenom} </td>
+                  <td>{item.etudiantBinome}</td>
+                  <td>{item.entreprise}</td>
+                  <td>
+                    <button
+                      onClick={() => getPDF(item.etudiantCin, item.etudiantCin)}
+                    >
+                      Télécharger le fichier
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <Typography color="gray">No data available</Typography>
+          <Typography color="gray">Aucune donnée disponible</Typography>
         )}
       </CardBody>
-      <CardFooter>
-        <Link to="/some-link">Go to Some Link</Link>
-      </CardFooter>
     </Card>
   );
 };

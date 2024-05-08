@@ -65,7 +65,24 @@ io.on("connection", (socket) => {
   });
   socket.on("getTeachersStage", async (data, callback) => {
     const stages = await Stage.find({ encadrant: data });
-    callback(stages);
+    const stageswithfiles = [];
+    for (let i = 0; i < stages.length; i++) {
+      const et = await Etudiant.findOne({ cin: stages[i].etudiant });
+      const file = et.fichier;
+      stageswithfiles.push({
+        _id: stages[i]._id,
+        etudiantCin: et.cin,
+        etudiantNom: et.nom,
+        etudiantPrenom: et.prenom,
+        etudiantEmail: et.email,
+        etudiantBinome: et.Binome,
+        etudiantFichier: file,
+        entreprise: stages[i].nom_entreprise,
+        sujet: stages[i].sujet,
+        date_creation: stages[i].date_creation,
+      });
+    }
+    callback(stageswithfiles);
   });
 });
 app.use("/admin", adminApi);

@@ -21,10 +21,10 @@ const upload = multer({ storage: storage, filename: customFilename });
 // Register Etudiant
 router.post("/register", async (req, res) => {
   try {
-    const { nom, prenom, cin, email, password } = req.body;
+    const e = new Etudiant(req.body);
 
     // Check if CIN exists
-    const exist = await CINS.findOne({ cin });
+    const exist = await CINS.findOne({ cin: e.cin });
     if (!exist) {
       return res
         .status(404)
@@ -34,34 +34,25 @@ router.post("/register", async (req, res) => {
     }
 
     // Check if CIN already exists
-    const cinExists = await Etudiant.findOne({ cin });
+    const cinExists = await Etudiant.findOne({ cin: e.cin });
     if (cinExists) {
       return res.status(400).send("CIN déjà existant.");
     }
 
     // Check if email already exists
-    const emailExists = await Etudiant.findOne({ email });
+    const emailExists = await Etudiant.findOne({ email: e.email });
     if (emailExists) {
       return res.status(400).send("Email déjà existant.");
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new Etudiant document
-    const etudiant = new Etudiant({
-      nom,
-      prenom,
-      cin,
-      email,
-      password: hashedPassword,
-      room: "A1",
-    });
+    const hashedPassword = await bcrypt.hash(e.password, 10);
     // Save the new Etudiant document to the database
-    await etudiant.save();
-    await CINS.findOneAndUpdate({ cin }, { isRegistred: true });
+    e.password = hashedPassword;
+    await e.save();
+    await CINS.findOneAndUpdate({ cin: e.cin }, { isRegistred: true });
     // Send a success response with the created Etudiant document
-    res.status(201).send(etudiant);
+    res.status(201).send(e);
   } catch (error) {
     // Handle any errors that occur during registration
     res.status(500).send(error.message);
@@ -88,11 +79,29 @@ router.post("/login", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
-
+router.get("/getfile/:cin", async (req, res) => {
+  try {
+    const etudiant = await Etudiant.findOne({ cin: req.params.cin });
+    if (!etudiant) {
+      return res.status(404).send("Etudiant not found");
+    }
+    // Ensure that etudiant.fichier is not null before sending
+    if (!etudiant.fichier) {
+      return res.status(404).send("File not found for this student");
+    }
+    // Decode the Base64 string back to a Buffer
+    const fileBuffer = Buffer.from(etudiant.fichier, "base64");
+    // Set the appropriate content type header
+    res.setHeader("Content-Type", etudiant.contentType);
+    // Send the file data as the response
+    res.send(fileBuffer);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 // Create Stage PFE
 router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
   try {
-    console.log(req.body);
     const etudiant = req.body;
     const et = await Etudiant.findOne({ cin: etudiant.etudiant });
 
@@ -103,18 +112,19 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
     if (!binome && etudiant.Binome != "") {
       return res.status(404).send("Binome n'existe pas");
     }
-    let stage = await Stage.findOne({ etudiant: et._id });
+    let stage = await Stage.findOne({ etudiant: et.cin });
     if (stage) {
       et.fichier = req.file.buffer.toString("base64");
-      await Etudiant.findOneAndUpdate({ cin: etudiant.cin }, et);
+      await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
       await Stage.findOneAndUpdate(
-        { etudiant: et._id },
-        { binome: binome._id },
+        { etudiant: et.cin },
+        { binome: binome ? binome.cin : "" },
         new Stage(etudiant)
       );
       return res.status(200).send("Stage modifié avec succès");
     }
     et.fichier = req.file.buffer.toString("base64");
+    console.log(et);
     await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
     stage = new Stage(etudiant);
     if (etudiant.binome) {

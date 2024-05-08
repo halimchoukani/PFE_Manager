@@ -1,4 +1,6 @@
+const { File } = require("buffer");
 const mongoose = require("mongoose");
+const { type } = require("os");
 const { Schema } = mongoose;
 const etudiantSchema = new Schema({
   nom: String,
@@ -15,7 +17,10 @@ const etudiantSchema = new Schema({
   },
   email: String,
   password: String,
-  fichier: String,
+  fichier: {
+    type: Buffer, // Store file as Buffer
+    contentType: String, // Store content type of the file
+  },
   classe: String,
   status: {
     type: String,
