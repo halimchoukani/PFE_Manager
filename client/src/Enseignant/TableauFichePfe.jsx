@@ -14,36 +14,37 @@ import React, { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { HomeLink } from "../HomeLink";
 
-async function Tableau(ev) {
-  ev.preventDefault();
-  const responce = await fetch("http://localhost:3001/enseignant/tableau", {
-    method: "POST",
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-  if (responce.ok) {
-    responce.json().then((data) => {
-      setRedirect(true);
-    });
-  } else {
-    console.log("Invalid email or password");
-  }
-}
-
 const TableauFichePfe = () => {
   const [data, setData] = useState([]);
 
-  const dataArray = [
-    { id: 1, name: "John Doe", age: 25 },
-    { id: 2, name: "Jane Smith", age: 30 },
-    { id: 3, name: "Bob Johnson", age: 35 },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/encadrant/tableau", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setData(data);
+      } else {
+        console.log("Invalid email or password");
+      }
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     setData(dataArray);
