@@ -115,16 +115,6 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
       return res.status(200).send("Stage modifié avec succès");
     }
     et.fichier = req.file.buffer.toString("base64");
-    const base64EncodedString = et.fichier;
-
-    // Decode base64 string to buffer
-    const fileBuffer = Buffer.from(base64EncodedString, "base64");
-
-    // Now you can read the file content from the buffer
-    // For example, you can convert it to a string
-    const fileContent = fileBuffer.toString("utf-8"); // Assuming the file is encoded in utf-8
-
-    console.log(fileContent);
     await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
     stage = new Stage(etudiant);
     if (etudiant.binome) {
