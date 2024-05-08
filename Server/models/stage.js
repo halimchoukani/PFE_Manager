@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const stage = new Schema({
-  cin: String,
   etudiant: String,
   classe: String,
   Binome: String,
@@ -14,7 +13,10 @@ const stage = new Schema({
   contact_enreprise: String,
   nom_entreprise: String,
   sujet_stage: String,
-  date_creation: Date,
+  date_creation: {
+    type: Date,
+    default: Date.now,
+  },
 });
 const Stage = mongoose.model("Stage", stage);
 module.exports = Stage;

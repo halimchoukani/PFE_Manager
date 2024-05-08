@@ -16,6 +16,7 @@ const etudiantSchema = new Schema({
   email: String,
   password: String,
   fichier: String,
+  classe: String,
   status: {
     type: String,
     enum: ["Activé", "Disactivé"],

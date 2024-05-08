@@ -38,16 +38,6 @@ const Etudiant = require("./models/etudiant");
 const exp = require("constants");
 
 // Set up Multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + "-" + Date.now() + ".pdf"); // Ensure file extension is '.pdf'
-  },
-});
-
-const upload = multer({ storage: storage });
 
 // Set up Socket.IO server
 const server = http.createServer(app);
