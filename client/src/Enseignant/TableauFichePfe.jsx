@@ -59,6 +59,9 @@ const TableauFichePfe = () => {
           <Typography color="gray">No data available</Typography>
         )}
       </CardBody>
+      <CardFooter>
+        <Link to="/some-link">Go to Some Link</Link>
+      </CardFooter>
     </Card>
   );
 };
