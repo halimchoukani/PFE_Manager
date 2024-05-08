@@ -3,26 +3,20 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+
 const Etudiant = require("../models/etudiant");
 const CINS = require("../models/cin");
 const secretKey = "gozgjzgpojzrpojz";
 const Stage = require("../models/stage");
+
 // Multer configuration
 const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype === "application/pdf") {
-      cb(null, true);
-    } else {
-      cb(new Error("Fichier must be a PDF"));
-    }
-  },
-  filename: (req, file, cb) => {
-    const fileName = req.body.cin + ".pdf"; // Rename file to student's cin
-    cb(null, fileName);
-  },
-});
+
+// Custom filename function to use the Cin as the filename
+const customFilename = (req, file, cb) => {
+  cb(null, req.body.etudiant);
+};
+const upload = multer({ storage: storage, filename: customFilename });
 
 // Register Etudiant
 router.post("/register", async (req, res) => {
@@ -98,26 +92,45 @@ router.post("/login", async (req, res) => {
 // Create Stage PFE
 router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
   try {
+    console.log(req.body);
     const etudiant = req.body;
-    const et = await Etudiant.findOne({ cin: etudiant.cin });
-    const binome = await Etudiant.findOne({ cin: etudiant.binome });
+    const et = await Etudiant.findOne({ cin: etudiant.etudiant });
+
     if (!et) {
       return res.status(404).send("Etudiant n'existe pas");
     }
-    if (!binome) {
+    const binome = await Etudiant.findOne({ cin: etudiant.Binome });
+    if (!binome && etudiant.Binome != "") {
       return res.status(404).send("Binome n'existe pas");
     }
-    const stage = Stage.findOne({ etudiant: et._id });
-    const s = new Stage();
+    let stage = await Stage.findOne({ etudiant: et._id });
     if (stage) {
-      stage.findOneAndUpdate(
+      et.fichier = req.file.buffer.toString("base64");
+      await Etudiant.findOneAndUpdate({ cin: etudiant.cin }, et);
+      await Stage.findOneAndUpdate(
         { etudiant: et._id },
         { binome: binome._id },
-        etudiant
+        new Stage(etudiant)
       );
       return res.status(200).send("Stage modifié avec succès");
     }
-    stage.save();
+    et.fichier = req.file.buffer.toString("base64");
+    const base64EncodedString = et.fichier;
+
+    // Decode base64 string to buffer
+    const fileBuffer = Buffer.from(base64EncodedString, "base64");
+
+    // Now you can read the file content from the buffer
+    // For example, you can convert it to a string
+    const fileContent = fileBuffer.toString("utf-8"); // Assuming the file is encoded in utf-8
+
+    console.log(fileContent);
+    await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
+    stage = new Stage(etudiant);
+    if (etudiant.binome) {
+      stage.binome = binome._id;
+    }
+    await stage.save();
     res.status(201).send("Stage ajouté avec succès");
   } catch (error) {
     res.status(500).send(error.message);
