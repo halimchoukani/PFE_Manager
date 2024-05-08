@@ -11,68 +11,53 @@ import {
   Button,
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import { HomeLink } from "../HomeLink";
-
-async function Tableau(ev) {
-  ev.preventDefault();
-  const responce = await fetch("http://localhost:3001/enseignant/tableau", {
-    method: "POST",
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-  if (responce.ok) {
-    responce.json().then((data) => {
-      setRedirect(true);
-    });
-  } else {
-    console.log("Invalid email or password");
-  }
-}
+import { io } from "socket.io-client";
+const Socket = io.connect("http://localhost:3001");
 
 const TableauFichePfe = () => {
-  const [data, setData] = useState([]);
-
+  const [data, setData] = useState(null);
+  const teacherId = "12345678";
+  function getStage() {
+    Socket.emit("getTeachersStage", teacherId, (data) => {
+      setData(data);
+    });
+  }
+  useEffect(() => {
+    getStage();
+  }, [Socket, data]);
   const dataArray = [
     { id: 1, name: "John Doe", age: 25 },
     { id: 2, name: "Jane Smith", age: 30 },
     { id: 3, name: "Bob Johnson", age: 35 },
   ];
-
-  useEffect(() => {
-    setData(dataArray);
-  }, []);
-
   return (
     <Card>
       <CardHeader>
         <Typography color="gray">Tableau Fiche PFE</Typography>
       </CardHeader>
       <CardBody>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Age</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.age}</td>
+        {data && data.length > 0 ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Etudiant</th>
+                <th>Binome</th>
+                <th>nom_entreprise </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((item) => (
+                <tr key={item._id}>
+                  <td>{item.etudiant}</td>
+                  <td>{item.Binome}</td>
+                  <td>{item.nom_entreprise}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <Typography color="gray">No data available</Typography>
+        )}
       </CardBody>
     </Card>
   );

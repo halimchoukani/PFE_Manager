@@ -12,6 +12,7 @@ const cinApi = require("./routes/cin");
 const adminApi = require("./routes/admin");
 const encadrantApi = require("./routes/encadrant");
 const etudiantApi = require("./routes/etudiant");
+const Stage = require("./models/stage");
 // Set up CORS
 app.use(express.json());
 app.use(
@@ -58,6 +59,14 @@ io.on("connection", (socket) => {
   socket.on("getStudents", async (callback) => {
     const students = await Etudiant.find({});
     callback(students);
+  });
+  socket.on("getTeachers", async (callback) => {
+    const teachers = await Encadrant.find({});
+    callback(teachers);
+  });
+  socket.on("getTeachersStage", async (data, callback) => {
+    const stages = await Stage.find({ encadrant: data });
+    callback(stages);
   });
 });
 app.use("/admin", adminApi);

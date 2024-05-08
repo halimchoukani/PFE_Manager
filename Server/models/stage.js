@@ -10,6 +10,8 @@ const stage = new Schema({
     enum: ["Vérifée", "En cours", "Non Accepter"],
     default: "En cours",
   },
+  encadrant: String,
+  encadrant_entreprise: String,
   contact_enreprise: String,
   nom_entreprise: String,
   sujet_stage: String,
