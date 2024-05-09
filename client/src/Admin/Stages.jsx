@@ -15,7 +15,6 @@ export default function Stages() {
   function getStage() {
     Socket.emit("getStages", (data) => {
       setData(data);
-      console.log(data);
     });
   }
 
@@ -197,12 +196,12 @@ export default function Stages() {
                         </Typography>
                       </div>
                     </td>
-                    <td>
+                    <td className="p-4 border-b border-blue-gray-50 flex gap-2">
                       <Button color="blue" size="regular" ripple="light">
                         Modifier
                       </Button>
                       <Button color="red" size="regular" ripple="light">
-                        Supprimer
+                        Desactiver
                       </Button>
                     </td>
                   </tr>
