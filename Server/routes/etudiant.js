@@ -81,7 +81,8 @@ router.post("/login", async (req, res) => {
 });
 router.get("/getfile/:cin", async (req, res) => {
   try {
-    const etudiant = await Etudiant.findOne({ cin: req.params.cin });
+    const cin = req.params.cin;
+    const etudiant = await Etudiant.findOne({ cin: cin });
     if (!etudiant) {
       return res.status(404).send("Etudiant not found");
     }
@@ -89,11 +90,8 @@ router.get("/getfile/:cin", async (req, res) => {
     if (!etudiant.fichier) {
       return res.status(404).send("File not found for this student");
     }
-    // Decode the Base64 string back to a Buffer
     const fileBuffer = Buffer.from(etudiant.fichier, "base64");
-    // Set the appropriate content type header
-    res.setHeader("Content-Type", etudiant.contentType);
-    // Send the file data as the response
+    res.setHeader("Content-Type", "application/pdf");
     res.send(fileBuffer);
   } catch (error) {
     res.status(500).send(error.message);

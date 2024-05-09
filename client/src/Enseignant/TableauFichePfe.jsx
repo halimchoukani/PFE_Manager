@@ -13,8 +13,8 @@ const TableauFichePfe = () => {
   const [data, setData] = useState(null);
   const teacherId = "12345678";
   async function getPDF(name, cin) {
-    await fetch(`http://localhost:3001/getfile/${cin}`).then((response) => {
-      response.blob().then((blob) => {
+    await fetch(`http://localhost:3001/etudiant/getfile/${cin}`).then((response) => {
+        response.blob().then((blob) => {
         let url = window.URL.createObjectURL(blob);
         let a = document.createElement("a");
         a.href = url;
