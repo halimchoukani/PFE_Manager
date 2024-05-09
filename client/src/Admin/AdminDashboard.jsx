@@ -20,18 +20,6 @@ import {
 import Stages from "./Stages";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
-const TABLE_HEAD = [
-  "ID Stage",
-  "Etudiant",
-  "Classe",
-  "Binome",
-  "Classe Binome",
-  "Status",
-  "Contact Societe",
-  "Encadrant",
-  "Date",
-  "Actions",
-];
 const Socket = io.connect("http://localhost:3001");
 
 export default function AdminDashboard() {
@@ -39,12 +27,12 @@ export default function AdminDashboard() {
   const [stageSubmitItByStudents, setStageSubmitItByStudents] = useState(0);
   async function getStageVerified() {
     await Socket.emit("getVerifiedNumber", (data) => {
-      setStageVerified(data);
+      setStageVerified(parseFloat(data));
     });
   }
   function getStageSubmitItByStudents() {
     Socket.emit("getStageSubmitItByStudents", (data) => {
-      setStageSubmitItByStudents(data);
+      setStageSubmitItByStudents(parseFloat(data));
     });
   }
   useEffect(() => {
