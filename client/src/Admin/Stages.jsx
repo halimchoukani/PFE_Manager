@@ -110,6 +110,7 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.etudiantBinome}
                         </Typography>
                       </div>
@@ -121,6 +122,7 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.binomeClasse}
                         </Typography>
                       </div>
@@ -148,6 +150,7 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.encadrant}
                         </Typography>
                       </div>
@@ -159,6 +162,7 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.contact}
                         </Typography>
                       </div>
@@ -170,6 +174,7 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.entreprise}
                         </Typography>
                       </div>
@@ -181,6 +186,7 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.encadrant_societe}
                         </Typography>
                       </div>
@@ -192,17 +198,14 @@ export default function Stages() {
                           color="blue-gray"
                           className="font-bold"
                         >
+                          {""}
                           {item.date_creation}
                         </Typography>
                       </div>
                     </td>
                     <td className="p-4 border-b border-blue-gray-50 flex gap-2">
-                      <Button color="blue" size="regular" ripple="light">
-                        Modifier
-                      </Button>
-                      <Button color="red" size="regular" ripple="light">
-                        Desactiver
-                      </Button>
+                      <Button color="blue">Modifier</Button>
+                      <Button color="red">Desactiver</Button>
                     </td>
                   </tr>
                 ))}
