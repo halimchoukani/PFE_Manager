@@ -29,7 +29,7 @@ export default function SideHeader() {
   };
 
   return (
-    <Card className="h-[calc(100vh-2rem)] w-[calc(50vw)] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 relative">
+    <Card className=" h-screen w-[calc(50vw)] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 relative ">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
           Admin Dashboard

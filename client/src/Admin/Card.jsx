@@ -9,7 +9,7 @@ import {
 
 export default function MyCard(props) {
   return (
-    <Card className="mt-6 w-full h-full">
+    <Card className="mt-6 w-1/2 h-full">
       <CardBody>
         <svg
           className="mb-4 h-12 w-12 text-gray-900"

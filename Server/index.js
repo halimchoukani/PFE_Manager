@@ -37,6 +37,7 @@ const Admin = require("./models/admin");
 const Encadrant = require("./models/encadrant");
 const Etudiant = require("./models/etudiant");
 const exp = require("constants");
+const CIN = require("./models/cin");
 
 // Set up Multer for file uploads
 
@@ -63,6 +64,47 @@ io.on("connection", (socket) => {
     const teachers = await Encadrant.find({});
     callback(teachers);
   });
+  socket.on("getStages", async (callback) => {
+    const stages = await Stage.find({});
+    const stageswithfiles = [];
+    for (let i = 0; i < stages.length; i++) {
+      const et = await Etudiant.findOne({ cin: stages[i].etudiant });
+      const file = et.fichier;
+      stageswithfiles.push({
+        _id: stages[i]._id,
+        stage: stages[i]._id,
+        etudiantCin: et.cin,
+        etudiantNom: et.nom,
+        etudiantClasse: et.classe,
+        etudiantPrenom: et.prenom,
+        etudiantEmail: et.email,
+        status: stages[i].status,
+        etudiantBinome: et.Binome,
+        binomeClasse: "Classe Binome",
+        encadrant: stages[i].encadrant,
+        entreprise: stages[i].nom_entreprise,
+        contact: stages[i].contact_entreprise,
+        encadrant_societe: stages[i].encadrant_entreprise,
+        sujet: stages[i].sujet_stage,
+        date_creation: stages[i].date_creation,
+      });
+    }
+    console.log(stageswithfiles);
+    callback(stageswithfiles);
+  });
+  socket.on("getVerifiedNumber", async (callback) => {
+    const stages_verified = await Stage.find({ status: "Vérifée" });
+    const stages = await Stage.find({});
+    callback(
+      parseFloat((stages_verified.length * 100) / stages.length).toFixed(2)
+    );
+  });
+  socket.on("getStageSubmitItByStudents", async (callback) => {
+    const allStudents = await CIN.find({});
+    const stages = await Stage.find({});
+    callback(parseFloat((stages.length * 100) / allStudents.length).toFixed(2));
+  });
+
   socket.on("getTeachersStage", async (data, callback) => {
     const stages = await Stage.find({ encadrant: data });
     const stageswithfiles = [];
@@ -72,6 +114,7 @@ io.on("connection", (socket) => {
       stageswithfiles.push({
         _id: stages[i]._id,
         etudiantCin: et.cin,
+        status: stages[i].status,
         etudiantNom: et.nom,
         etudiantPrenom: et.prenom,
         etudiantEmail: et.email,

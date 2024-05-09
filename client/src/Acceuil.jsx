@@ -52,13 +52,13 @@ const navListMenuItems = [
   {
     title: "Encadrant",
     description: "Connexion qu'aux encadrants",
-    link: "/etudiant/login",
+    link: "/encadrant/login",
     icon: UserGroupIcon,
   },
   {
     title: "Admin",
     description: "Connexion qu'aux admins",
-    link: "/etudiant/login",
+    link: "/admin/login",
     icon: Bars4Icon,
   },
 ];
