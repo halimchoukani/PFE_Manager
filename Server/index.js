@@ -89,7 +89,6 @@ io.on("connection", (socket) => {
         date_creation: stages[i].date_creation,
       });
     }
-    console.log(stageswithfiles);
     callback(stageswithfiles);
   });
   socket.on("getVerifiedNumber", async (callback) => {
