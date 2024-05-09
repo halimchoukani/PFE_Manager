@@ -13,15 +13,24 @@ const TableauFichePfe = () => {
   const [data, setData] = useState(null);
   const teacherId = "12345678";
   async function getPDF(name, cin) {
-    await fetch(`http://localhost:3001/etudiant/getfile/${cin}`).then((response) => {
-        response.blob().then((blob) => {
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement("a");
-        a.href = url;
-        a.download = name + ".pdf";
-        a.click();
-      });
-    });
+    try {
+      const response = await fetch(`http://localhost:3001/etudiant/getfile/${cin}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch PDF');
+      }
+
+      const blob = await response.blob();
+      console.log(blob);
+      const url = await window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
   }
   function getStage() {
     Socket.emit("getTeachersStage", teacherId, (data) => {
