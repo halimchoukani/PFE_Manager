@@ -115,17 +115,13 @@ export function FormulaireStage() {
             <div className="w-full flex flex-col gap-4">
               <div className="w-full">
                 <Select
-                  label="Select Version"
+                  label="Select Votre Encadrant (ISET)"
                   animate={{
                     mount: { y: 0 },
                     unmount: { y: 25 },
                   }}
                 >
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
+                  <Option>Exemple</Option>
                 </Select>
               </div>
               <Input type="text" size="lg" label="Nom de votre société" />
