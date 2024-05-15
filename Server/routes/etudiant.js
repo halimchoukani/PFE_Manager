@@ -26,6 +26,7 @@ router.post("/register", async (req, res) => {
     // Check if CIN exists
     const exist = await CINS.findOne({ cin: e.cin });
     if (!exist) {
+
       return res
         .status(404)
         .send(
@@ -36,7 +37,7 @@ router.post("/register", async (req, res) => {
     // Check if CIN already exists
     const cinExists = await Etudiant.findOne({ cin: e.cin });
     if (cinExists) {
-      return res.status(400).send("CIN déjà existant.");
+      return res.status(400).send("Etudiant déjà existant.");
     }
 
     // Check if email already exists

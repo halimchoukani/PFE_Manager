@@ -84,9 +84,15 @@ export function FormulaireStage() {
                 required
                 size="lg"
               />
-              <Input type="text" size="lg" label="Votre Nom" />
-              <Input type="text" size="lg" label="Votre Prénom" />
-              <Input type="email" size="lg" label="Votre Adresse Mail" />
+              <Input type="text" size="lg" label="Votre Nom" value={Nom} onChange={(e)=>{
+                setNom(e.target.value)
+              }} />
+              <Input type="text" size="lg" label="Votre Prénom" value={Prenom} onChange={(e)=>{
+                setPrenom(e.target.value)
+              }} />
+              <Input type="email" size="lg" label="Votre Adresse Mail" value={Email} onChange={(e)=>{
+                setEmail(e.target.value)
+              }} />
               <div className="w-full">
                 <Select
                   label="Selection Votre Binome"
@@ -96,13 +102,17 @@ export function FormulaireStage() {
                   }}
                 >
                   {students.map((student) => (
-                    <Option key={student._id}>
+                    <Option key={student._id} onClick={
+                      setBinome(student.cin)
+                     } >
                       {student.cin + " " + student.nom + " " + student.prenom}
                     </Option>
                   ))}
                 </Select>
               </div>
-              <Input type="email" size="lg" label="Email de votre binome" />
+              <Input type="email" size="lg" label="Email de votre binome" value={EmailBinome} onChange={(e)=>{
+                setEmailBinome(e.target.value)
+              }} />
               <Textarea
                 type="textarea"
                 name="sujet"
@@ -110,6 +120,10 @@ export function FormulaireStage() {
                 rows={4}
                 label="Sujet de votre stage"
                 defaultValue={""}
+                value={Sujet}
+                onChange={(e)=>{
+                  setSujet(e.target.value)
+                }}
               />
             </div>
             <div className="w-full flex flex-col gap-4">
@@ -124,8 +138,10 @@ export function FormulaireStage() {
                   <Option>Exemple</Option>
                 </Select>
               </div>
-              <Input type="text" size="lg" label="Nom de votre société" />
-              <Input type="text" size="lg" label="Encadrant de votre société" />
+              <Input type="text" size="lg" label="Nom de votre société" value={NomSociete} onChange={(e)=>{
+                setNomSociete(e.target.value)
+              }} />
+              <Input type="text" size="lg" label="Encadrant de votre société"  />
               <Input type="text" size="lg" label="Email de votre société" />
               <div className="col-span-full">
                 <label
