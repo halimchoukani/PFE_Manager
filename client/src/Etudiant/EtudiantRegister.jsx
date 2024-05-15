@@ -28,12 +28,17 @@ export default function EtudiantRegister() {
   const [redirect, setRedirect] = useState(false);
   const [cinerror, setCinError] = useState(false);
   const [error, setError] = useState(false);
-  async function Register(ev) {
+  async function register(ev) {
     ev.preventDefault();
-    const responce = await fetch("http://localhost:3001/etudiant/register", {
+    
+      const responce = await fetch("http://localhost:3001/etudiant/register", {
       method: "POST",
       body: JSON.stringify({
+        cin,
+        nom,
+        prenom,
         email,
+        classe,
         password,
       }),
       headers: {
@@ -41,21 +46,13 @@ export default function EtudiantRegister() {
       },
       credentials: "include",
     });
-    if (responce.ok) {
-      responce.json().then((data) => {
-        setRedirect(true);
-      });
-    } else {
-      console.log("Invalid email or password");
-    }
-  }
-  if (redirect) {
-    return <Navigate to="/" />;
+    console.log(responce);
+    
   }
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      <form>
+      <form method="post">
         <Card className="w-100">
           <CardHeader
             variant="gradient"
@@ -194,7 +191,7 @@ export default function EtudiantRegister() {
               variant="gradient"
               fullWidth
               type="submit"
-              onClick={console.log(classe)}
+              onClick={register}
             >
               Enregistrer
             </Button>
