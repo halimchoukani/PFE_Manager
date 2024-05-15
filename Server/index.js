@@ -136,11 +136,9 @@ io.on("connection", (socket) => {
       await cin.save();
       callback("CIN est ajouté avec succès");
     } catch (error) {
-      callback("CIN existe déjà");  
+      callback("CIN existe déjà");
     }
   });
-
-
 });
 app.use("/admin", adminApi);
 app.use("/encadrant", encadrantApi);
