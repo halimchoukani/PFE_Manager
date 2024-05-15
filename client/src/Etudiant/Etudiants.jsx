@@ -24,7 +24,7 @@ export default function Etudiants() {
   useEffect(() => {
     getUSERS();
   }, [Socket]);
-  
+
   return (
     <CardBody className="grow">
       <div className="w-auto">
@@ -32,7 +32,9 @@ export default function Etudiants() {
           <Typography color="blue-gray" variant="h6">
             Etudiant
           </Typography>
-          <Link to="ajoutcin"><Button> + Ajouter un etudiant</Button></Link>
+          <Link to="/admin/comptes/ajoutcin">
+            <Button> + Ajouter un etudiant</Button>
+          </Link>
         </div>
       </div>
 

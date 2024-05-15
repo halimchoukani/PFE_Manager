@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Etudiants from "../Etudiant/Etudiants";
+import { Link } from "react-router-dom";
 const Socket = io.connect("http://localhost:3001");
 
 export default function Encadrants() {
@@ -31,7 +32,9 @@ export default function Encadrants() {
           <Typography color="blue-gray" variant="h6">
             Encadrant
           </Typography>
-          <Button> + Ajouter un encadrant</Button>
+          <Link to="/admin/comptes/ajoutencadrant">
+            <Button> + Ajouter un encadrant</Button>
+          </Link>
         </div>
       </div>
 

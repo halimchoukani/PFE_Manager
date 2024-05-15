@@ -91,6 +91,60 @@ io.on("connection", (socket) => {
     }
     callback(stageswithfiles);
   });
+  socket.on("getStagesVerifie", async (callback) => {
+    const stages = await Stage.find({ status: "Vérifée" });
+    const stageswithfiles = [];
+    for (let i = 0; i < stages.length; i++) {
+      const et = await Etudiant.findOne({ cin: stages[i].etudiant });
+      const file = et.fichier;
+      stageswithfiles.push({
+        _id: stages[i]._id,
+        stage: stages[i]._id,
+        etudiantCin: et.cin,
+        etudiantNom: et.nom,
+        etudiantClasse: et.classe,
+        etudiantPrenom: et.prenom,
+        etudiantEmail: et.email,
+        status: stages[i].status,
+        etudiantBinome: et.Binome,
+        binomeClasse: "Classe Binome",
+        encadrant: stages[i].encadrant,
+        entreprise: stages[i].nom_entreprise,
+        contact: stages[i].contact_entreprise,
+        encadrant_societe: stages[i].encadrant_entreprise,
+        sujet: stages[i].sujet_stage,
+        date_creation: stages[i].date_creation,
+      });
+    }
+    callback(stageswithfiles);
+  });
+  socket.on("getStagesEnCours", async (callback) => {
+    const stages = await Stage.find({ status: "En cours" });
+    const stageswithfiles = [];
+    for (let i = 0; i < stages.length; i++) {
+      const et = await Etudiant.findOne({ cin: stages[i].etudiant });
+      const file = et.fichier;
+      stageswithfiles.push({
+        _id: stages[i]._id,
+        stage: stages[i]._id,
+        etudiantCin: et.cin,
+        etudiantNom: et.nom,
+        etudiantClasse: et.classe,
+        etudiantPrenom: et.prenom,
+        etudiantEmail: et.email,
+        status: stages[i].status,
+        etudiantBinome: et.Binome,
+        binomeClasse: "Classe Binome",
+        encadrant: stages[i].encadrant,
+        entreprise: stages[i].nom_entreprise,
+        contact: stages[i].contact_entreprise,
+        encadrant_societe: stages[i].encadrant_entreprise,
+        sujet: stages[i].sujet_stage,
+        date_creation: stages[i].date_creation,
+      });
+    }
+    callback(stageswithfiles);
+  });
   socket.on("getVerifiedNumber", async (callback) => {
     const stages_verified = await Stage.find({ status: "Vérifée" });
     const stages = await Stage.find({});

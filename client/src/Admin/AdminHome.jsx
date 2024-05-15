@@ -7,6 +7,10 @@ import Comptes from "./Comptes"; // Assuming this is the correct import for the 
 import Etudiants from "../Etudiant/Etudiants";
 import Encadrants from "../Enseignant/Encadrants";
 import { AddCin } from "./AddCin";
+import Stages from "./Stages";
+import StagesV from "./StagesV";
+import StagesF from "./StagesF";
+import EnseignantRegister from "../Enseignant/EnseignantRegister";
 export default function AdminHome() {
   return (
     <div className="w-screen flex flex-row gap-3">
@@ -16,7 +20,14 @@ export default function AdminHome() {
           <Route path="comptes" element={<Comptes />} />
           <Route path="comptes/etudiant" element={<Etudiants />} />
           <Route path="comptes/ajoutcin" element={<AddCin />} />
+          <Route
+            path="comptes/ajoutencadrant"
+            element={<EnseignantRegister />}
+          />
           <Route path="comptes/encadrant" element={<Encadrants />} />
+          <Route path="stages" element={<Stages />} />
+          <Route path="stages/verifie" element={<StagesV />} />
+          <Route path="stages/encours" element={<StagesF />} />
         </Route>
       </Routes>
     </div>

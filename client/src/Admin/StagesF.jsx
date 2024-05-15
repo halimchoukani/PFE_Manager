@@ -10,10 +10,10 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 const Socket = io.connect("http://localhost:3001");
 
-export default function Stages() {
+export default function StagesF() {
   const [data, setData] = useState([]);
   function getStage() {
-    Socket.emit("getStages", (data) => {
+    Socket.emit("getStagesEnCours", (data) => {
       setData(data);
     });
   }
@@ -27,7 +27,7 @@ export default function Stages() {
         <div className="w-full">
           <div className="mb-2 flex items-center justify-between gap-4">
             <Typography color="blue-gray" variant="h6">
-              Table de Stages
+              Table de Stages En Cours
             </Typography>
           </div>
         </div>
