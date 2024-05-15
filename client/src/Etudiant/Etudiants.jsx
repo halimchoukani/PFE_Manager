@@ -7,6 +7,7 @@ import {
   Chip,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { io } from "socket.io-client";
 const Socket = io.connect("http://localhost:3001");
 
@@ -23,6 +24,7 @@ export default function Etudiants() {
   useEffect(() => {
     getUSERS();
   }, [Socket]);
+  
   return (
     <CardBody className="grow">
       <div className="w-auto">
@@ -30,7 +32,7 @@ export default function Etudiants() {
           <Typography color="blue-gray" variant="h6">
             Etudiant
           </Typography>
-          <Button> + Ajouter un etudiant</Button>
+          <Link to="ajoutcin"><Button> + Ajouter un etudiant</Button></Link>
         </div>
       </div>
 

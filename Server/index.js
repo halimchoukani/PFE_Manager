@@ -126,6 +126,21 @@ io.on("connection", (socket) => {
     }
     callback(stageswithfiles);
   });
+
+  socket.on("addcin", async (data, callback) => {
+    const cin = new CIN({
+      cin: data,
+      isRegistred: false,
+    });
+    try {
+      await cin.save();
+      callback("CIN est ajouté avec succès");
+    } catch (error) {
+      callback("CIN existe déjà");  
+    }
+  });
+
+
 });
 app.use("/admin", adminApi);
 app.use("/encadrant", encadrantApi);
