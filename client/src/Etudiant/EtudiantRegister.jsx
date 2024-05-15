@@ -194,7 +194,7 @@ export default function EtudiantRegister() {
               variant="gradient"
               fullWidth
               type="submit"
-              onClick={console.log(classe)}
+              onClick={Register}
             >
               Enregistrer
             </Button>

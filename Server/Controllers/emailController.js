@@ -1,6 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
+
 dotenv.config();
 
 let transporter = nodemailer.createTransport({
@@ -19,7 +20,7 @@ const sendEmail = expressAsyncHandler(async (req, res) => {
 
   var mailOptions = {
     from: process.env.SMTP_MAIL,
-    to: email,
+    to: email, // Use the email address of the logged in etudiant
     subject: subject,
     text: message,
   };
