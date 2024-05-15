@@ -191,7 +191,7 @@ export default function EtudiantRegister() {
               variant="gradient"
               fullWidth
               type="submit"
-              onClick={register}
+              onClick={Register}
             >
               Enregistrer
             </Button>

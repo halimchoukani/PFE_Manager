@@ -194,7 +194,7 @@ import {
                 variant="gradient"
                 fullWidth
                 type="submit"
-                onClick={console.log(classe)}
+                onClick={Register}
               >
                 Enregistrer
               </Button>
