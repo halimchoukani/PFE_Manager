@@ -11,6 +11,7 @@ import { FormulaireStage } from "./Etudiant/FormulaireStage";
 import TableauFichePfe from "./Enseignant/TableauFichePfe";
 import Etudiants from "./Etudiant/Etudiants";
 import Encadrants from "./Enseignant/Encadrants";
+import EnseignantRegister from "./Enseignant/EnseignantRegister";
 
 const socket = io.connect("http://localhost:3001");
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/etudiant" element={<FormulaireStage />} />
         <Route path="/encadrant" element={<TableauFichePfe />} />
         <Route path="/etudiant/login" element={<EtudiantLogin />} />
+        <Route path="/encadrant/login" element={<EnseignantLogin />} />
       </Routes>
     </>
   );

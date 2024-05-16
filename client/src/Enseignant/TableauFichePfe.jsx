@@ -1,109 +1,142 @@
-import React, { useEffect, useState } from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
+  CardFooter,
   Typography,
+  Button,
+  Chip,
 } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-
+import Etudiants from "../Etudiant/Etudiants";
+import { Link } from "react-router-dom";
 const Socket = io.connect("http://localhost:3001");
 
-const TableauFichePfe = () => {
-  const [data, setData] = useState(null);
-  const teacherId = "12345678";
-  async function getPDF(name, cin) {
-    try {
-      const response = await fetch(
-        `http://localhost:3001/etudiant/getfile/${cin}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch PDF");
-      }
-
-      const blob = await response.blob();
-      console.log(blob);
-      const url = await window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = name + ".pdf";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-    }
-  }
-  function getStage() {
-    Socket.emit("getTeachersStage", teacherId, (data) => {
-      setData(data);
+export default function TableauFiche() {
+  const [teachers, setTeachers] = useState([]);
+  const [tloading, setTloading] = useState(true);
+  function getUSERS() {
+    Socket.emit("getTeachers", (data) => {
+      setTeachers(data);
+      setTloading(false);
     });
   }
 
-  function downloadFile(pdf, name) {
-    // Assuming pdf.etudiantFichier is the ArrayBuffer
-    const arrayBuffer = pdf.etudiantFichier;
-
-    // Create a Blob from the ArrayBuffer
-    const blob = new Blob([arrayBuffer], { type: "application/pdf" });
-
-    // Create a URL for the Blob
-    const url = URL.createObjectURL(blob);
-
-    // Create a link element
-    const downloadLink = document.createElement("a");
-    downloadLink.href = url;
-    downloadLink.download = name; // Specify the desired filename
-    downloadLink.textContent = "Download File";
-
-    // Trigger the download
-    downloadLink.click();
-    URL.revokeObjectURL(url);
-  }
-
   useEffect(() => {
-    getStage();
-  }, []); // Run once on component mount
-
+    getUSERS();
+  }, [Socket]);
   return (
-    <Card>
-      <CardHeader>
-        <Typography color="gray">Tableau Fiche PFE</Typography>
-      </CardHeader>
-      <CardBody>
-        {data && data.length > 0 ? (
-          <table>
+    <CardBody className="grow">
+      <div className="w-full">
+        <div className="mb-2 flex items-center justify-between gap-4">
+          <Typography color="blue-gray" variant="h6">
+            Encadrant
+          </Typography>
+          <Link to="/admin/comptes/ajoutencadrant">
+            <Button> + Ajouter un encadrant</Button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        {teachers.length > 0 && tloading == true ? (
+          <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
-                <th>Etudiant</th>
-                <th>Binome</th>
-                <th>nom_entreprise</th>
-                <th>Action</th>
+                <th className="p-4 border-b border-blue-gray-50">_Id</th>
+                <th className="p-4 border-b border-blue-gray-50">CIN</th>
+                <th className="p-4 border-b border-blue-gray-50">Nom</th>
+                <th className="p-4 border-b border-blue-gray-50">Prenom</th>
+                <th className="p-4 border-b border-blue-gray-50">Email</th>
+                <th className="p-4 border-b border-blue-gray-50">Status</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {teachers.map((item) => (
                 <tr key={item._id}>
-                  <td>{item.etudiantNom + " " + item.etudiantPrenom} </td>
-                  <td>{item.etudiantBinome}</td>
-                  <td>{item.entreprise}</td>
-                  <td>
-                    <button
-                      onClick={() => getPDF(item.etudiantCin, item.etudiantCin)}
-                    >
-                      Télécharger le fichier
-                    </button>
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <div className="flex items-center gap-3">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-bold"
+                      >
+                        {item._id}
+                      </Typography>
+                    </div>
+                  </td>
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <div className="flex items-center gap-3">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-bold"
+                      >
+                        {item.cin}
+                      </Typography>
+                    </div>
+                  </td>
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <div className="flex items-center gap-3">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-bold"
+                      >
+                        {item.nom}
+                      </Typography>
+                    </div>
+                  </td>
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <div className="flex items-center gap-3">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-bold"
+                      >
+                        {item.prenom}
+                      </Typography>
+                    </div>
+                  </td>
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <div className="flex items-center gap-3">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-bold"
+                      >
+                        {item.email}
+                      </Typography>
+                    </div>
+                  </td>
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <div className="w-max">
+                      <Chip
+                        size="sm"
+                        variant="ghost"
+                        value={item.status}
+                        color={
+                          item.status === "Activé"
+                            ? "green"
+                            : item.status === "Disactivé"
+                            ? "amber"
+                            : "red"
+                        }
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        ) : tloading == true ? (
+          <Typography className="m-4 text-center">Loading ....</Typography>
         ) : (
-          <Typography color="gray">Aucune donnée disponible</Typography>
+          <Typography className="m-4 text-center">
+            No data available.
+          </Typography>
         )}
-      </CardBody>
-    </Card>
+      </div>
+    </CardBody>
   );
-};
-
-export default TableauFichePfe;
+}
