@@ -11,7 +11,7 @@ import { FormulaireStage } from "./Etudiant/FormulaireStage";
 import TableauFichePfe from "./Enseignant/TableauFichePfe";
 import Etudiants from "./Etudiant/Etudiants";
 import Encadrants from "./Enseignant/Encadrants";
-import EnseignantRegister from "./Enseignant/EnseignantRegister";
+import EnseignantLogin from "./Enseignant/EnseignantLogin";
 
 const socket = io.connect("http://localhost:3001");
 

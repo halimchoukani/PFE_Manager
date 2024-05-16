@@ -86,15 +86,9 @@ export default function enseignantLogin() {
           </div>
         </CardBody>
         <CardFooter className="pt-0">
-          <Button variant="gradient" fullWidth>
+          <Button variant="gradient" fullWidth onClick={login}>
             Login
           </Button>
-          <Typography variant="small" className="mt-6 flex justify-center">
-            n&apos;a pas de compte ?
-            <Link to="/enseignant/register" className="ml-1 font-bold">
-              Enregistrer
-            </Link>
-          </Typography>
           <HomeLink />
         </CardFooter>
       </Card>
