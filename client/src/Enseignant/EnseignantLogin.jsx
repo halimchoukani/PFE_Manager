@@ -18,7 +18,7 @@ export default function enseignantLogin() {
   const [error, setError] = useState("");
   async function login(ev) {
     ev.preventDefault();
-    const responce = await fetch("http://localhost:3001/enseignant/login", {
+    const responce = await fetch("http://localhost:3001/encadrant/login", {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -31,14 +31,11 @@ export default function enseignantLogin() {
     });
     if (responce.ok) {
       responce.json().then((data) => {
-        setRedirect(true);
+        console.log(data);
       });
     } else {
       console.log("Invalid email or password");
     }
-  }
-  if (redirect) {
-    return <Navigate to="/" />;
   }
 
   return (
