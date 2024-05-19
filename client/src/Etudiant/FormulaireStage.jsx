@@ -31,6 +31,23 @@ function BinomeSelect({ students, setBinome }) {
     </Select>
   );
 }
+function EnseignantSelect({ teachers, setEncadrantIset }) {
+  return (
+    <Select
+      label="Sélectionnez votre encadrant (ISET)"
+      animate={{
+        mount: { y: 0 },
+        unmount: { y: 25 },
+      }}
+    >
+      {teachers.map((teacher) => (
+        <Option key={teacher._id} onClick={() => setEncadrantIset(teacher.cin)}>
+          {`${teacher.cin} ${teacher.nom} ${teacher.prenom}`}
+        </Option>
+      ))}
+    </Select>
+  );
+}
 
 function FileUpload() {
   return (
@@ -85,10 +102,17 @@ export function FormulaireStage() {
   const [error, setError] = useState(false);
   const [cinError, setCinError] = useState(false);
   const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [EncadrantIset, setEncadrantIset] = useState(""); // Add this line
 
   useEffect(() => {
     socket.emit("getStudents", (students) => {
       setStudents(students);
+    });
+  }, []);
+  useEffect(() => {
+    socket.emit("getTeachers", (teachers) => {
+      setTeachers(teachers);
     });
   }, []);
 
@@ -173,15 +197,10 @@ export function FormulaireStage() {
               />
             </div>
             <div className="w-full flex flex-col gap-4">
-              <Select
-                label="Select Votre Encadrant (ISET)"
-                animate={{
-                  mount: { y: 0 },
-                  unmount: { y: 25 },
-                }}
-              >
-                <Option>Exemple</Option>
-              </Select>
+              <EnseignantSelect
+                teachers={teachers}
+                setEncadrantIset={setEncadrantIset}
+              />
               <Input
                 type="text"
                 size="lg"
