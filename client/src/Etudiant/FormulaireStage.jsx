@@ -23,15 +23,17 @@ function BinomeSelect({ students, setBinome }) {
         mount: { y: 0 },
         unmount: { y: 25 },
       }}
+      onChange={(value) => setBinome(value)}
     >
       {students.map((student) => (
-        <Option key={student._id} onClick={() => setBinome(student.cin)}>
+        <Option key={student._id} value={student.cin}>
           {`${student.cin} ${student.nom} ${student.prenom}`}
         </Option>
       ))}
     </Select>
   );
 }
+
 function EnseignantSelect({ teachers, setEncadrantIset }) {
   return (
     <Select
@@ -40,9 +42,10 @@ function EnseignantSelect({ teachers, setEncadrantIset }) {
         mount: { y: 0 },
         unmount: { y: 25 },
       }}
+      onChange={(value) => setEncadrantIset(value)}
     >
       {teachers.map((teacher) => (
-        <Option key={teacher._id} onClick={() => setEncadrantIset(teacher.cin)}>
+        <Option key={teacher._id} value={teacher.cin}>
           {`${teacher.cin} ${teacher.nom} ${teacher.prenom}`}
         </Option>
       ))}
@@ -50,7 +53,7 @@ function EnseignantSelect({ teachers, setEncadrantIset }) {
   );
 }
 
-function FileUpload() {
+function FileUpload({ setFichierStage }) {
   return (
     <div className="col-span-full">
       <label
@@ -77,6 +80,7 @@ function FileUpload() {
                 type="file"
                 className="sr-only"
                 accept="application/pdf"
+                onChange={(e) => setFichierStage(e.target.files[0])}
               />
             </label>
           </div>
@@ -94,6 +98,7 @@ export function FormulaireStage() {
     JSON.parse(localStorage.getItem("user")).role !== "admin"
   )
     return <Navigate to="/" />;
+
   const [CIN, setCIN] = useState(
     JSON.parse(localStorage.getItem("user")).data.cin
   );
@@ -110,28 +115,67 @@ export function FormulaireStage() {
   const [NomSociete, setNomSociete] = useState("");
   const [EncadrantSociete, setEncadrantSociete] = useState("");
   const [EmailSociete, setEmailSociete] = useState("");
-  const [FichierStage, setFichierStage] = useState("");
+  const [FichierStage, setFichierStage] = useState(null);
   const [check, setCheck] = useState(true);
   const [error, setError] = useState(false);
   const [cinError, setCinError] = useState(false);
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
-  const [EncadrantIset, setEncadrantIset] = useState(""); // Add this line
+  const [EncadrantIset, setEncadrantIset] = useState("");
 
   useEffect(() => {
     socket.emit("getStudents", (students) => {
       setStudents(students);
     });
   }, []);
+
   useEffect(() => {
     socket.emit("getTeachers", (teachers) => {
       setTeachers(teachers);
     });
   }, []);
 
-  function AjouterStage(ev) {
+  async function AjouterStage(ev) {
     ev.preventDefault();
-    console.log("Ajouter Stage");
+    if (!check) {
+      setError(true);
+      return;
+    }
+    setError(false);
+
+    const formData = new FormData();
+    formData.append("etudiant", CIN);
+    formData.append("nom", Nom);
+    formData.append("prenom", Prenom);
+    formData.append("email", Email);
+    formData.append("Binome", Binome);
+    formData.append("email_binome", EmailBinome);
+    formData.append("sujet_stage", Sujet);
+    formData.append("nom_entreprise", NomSociete);
+    formData.append("encadrant_entreprise", EncadrantSociete);
+    formData.append("contact_enreprise", EmailSociete);
+    formData.append("fichier", FichierStage);
+    formData.append("encadrant", EncadrantIset);
+    console.log(formData.get("fichier"));
+    try {
+      const response = await fetch(
+        "http://localhost:3001/etudiant/ajouterstage",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        alert("Stage submitted successfully!");
+      } else {
+        alert("Failed to submit stage. Please try again.");
+      }
+    } catch (error) {
+      // Handle network errors
+      console.error("Error submitting stage:", error);
+      alert("An error occurred. Please try again.");
+    }
   }
 
   return (
@@ -201,7 +245,6 @@ export function FormulaireStage() {
                 onChange={(e) => setEmailBinome(e.target.value)}
               />
               <Textarea
-                type="textarea"
                 name="sujet"
                 id="sujet"
                 rows={4}
@@ -230,13 +273,13 @@ export function FormulaireStage() {
                 onChange={(e) => setEncadrantSociete(e.target.value)}
               />
               <Input
-                type="text"
+                type="email"
                 size="lg"
                 label="Email de votre société"
                 value={EmailSociete}
                 onChange={(e) => setEmailSociete(e.target.value)}
               />
-              <FileUpload />
+              <FileUpload setFichierStage={setFichierStage} />
             </div>
           </div>
           <Checkbox
@@ -244,7 +287,6 @@ export function FormulaireStage() {
             onClick={(e) => {
               !check ? setError(false) : setError(true);
               setCheck(e.target.checked);
-              console.log(check);
             }}
             label={
               <Typography

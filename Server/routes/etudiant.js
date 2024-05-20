@@ -11,21 +11,6 @@ const Stage = require("../models/stage");
 const multer = require("multer");
 const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads"));
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      req.body.etudiant + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
-});
-
-const upload = multer({ storage: storage });
-
 // Register Etudiant
 router.post("/register", async (req, res) => {
   try {
@@ -115,8 +100,20 @@ router.get("/getfile/:cin", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
-// Create Stage PFE
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../uploads"));
+  },
+  filename: (req, file, cb) => {
+    // const uniqueSuffix = "Date.now() + " - " + Math.round(Math.random() * 1e9)";
+    cb(null, req.body.etudiant + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
 router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
+  console.log(req.body);
   try {
     const etudiant = req.body;
     const et = await Etudiant.findOne({ cin: etudiant.etudiant });
@@ -131,7 +128,21 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
 
     let stage = await Stage.findOne({ etudiant: et.cin });
     const filePath = req.file ? req.file.path : "";
-
+    if (binome) {
+      let stagebinome = new Stage();
+      stagebinome.etudiant = binome.cin;
+      stagebinome.email = binome.email;
+      stagebinome.Binome = et.cin;
+      stagebinome.email_binome = et.email;
+      stagebinome.classe_binome = binome.classe;
+      stagebinome.classe = binome.classe;
+      stagebinome.nom_entreprise = etudiant.nom_entreprise;
+      stagebinome.sujet_stage = etudiant.sujet_stage;
+      stagebinome.date_creation = Date.now();
+      stagebinome.encadrant = etudiant.encadrant;
+      stagebinome.encadrant_entreprise = etudiant.encadrant_entreprise;
+      await stagebinome.save();
+    }
     if (stage) {
       et.fichier = filePath;
       await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
