@@ -17,7 +17,7 @@ export default function EtudiantLogin() {
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState("");
-
+  const [rememberMe, setRememberMe] = useState(false);
   async function login(ev) {
     ev.preventDefault();
     const response = await fetch("http://localhost:3001/etudiant/login", {
@@ -33,8 +33,18 @@ export default function EtudiantLogin() {
     });
     if (response.ok) {
       response.json().then((data) => {
-        console.log(data);
-        setRedirect(true); // Set redirect to true upon successful login
+        if (rememberMe) {
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ data, role: "etudiant" })
+          );
+        } else {
+          sessionStorage.setItem(
+            "user",
+            JSON.stringify({ data, role: "etudiant" })
+          );
+        }
+        setRedirect(true);
       });
     } else {
       console.log("Invalid email or password");

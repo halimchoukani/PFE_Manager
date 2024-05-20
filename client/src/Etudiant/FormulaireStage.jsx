@@ -10,6 +10,7 @@ import {
   Textarea,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
 const socket = io.connect("http://localhost:3001");
@@ -87,9 +88,21 @@ function FileUpload() {
 }
 
 export function FormulaireStage() {
-  const [CIN, setCIN] = useState("");
-  const [Nom, setNom] = useState("");
-  const [Prenom, setPrenom] = useState("");
+  if (!localStorage.getItem("user")) return <Navigate to="/" />;
+  if (
+    JSON.parse(localStorage.getItem("user")).role !== "etudiant" &&
+    JSON.parse(localStorage.getItem("user")).role !== "admin"
+  )
+    return <Navigate to="/" />;
+  const [CIN, setCIN] = useState(
+    JSON.parse(localStorage.getItem("user")).data.cin
+  );
+  const [Nom, setNom] = useState(
+    JSON.parse(localStorage.getItem("user")).data.nom
+  );
+  const [Prenom, setPrenom] = useState(
+    JSON.parse(localStorage.getItem("user")).data.prenom
+  );
   const [Email, setEmail] = useState("");
   const [Binome, setBinome] = useState("");
   const [EmailBinome, setEmailBinome] = useState("");
@@ -140,7 +153,7 @@ export function FormulaireStage() {
                 type="text"
                 label="Votre CIN"
                 id="cin"
-                value={CIN}
+                value={"Votre CIN : " + CIN}
                 onChange={(e) => {
                   if (e.target.value.length <= 8) {
                     setCinError(false);
@@ -156,6 +169,7 @@ export function FormulaireStage() {
                 autoComplete="cin"
                 required
                 size="lg"
+                disabled
               />
               <Input
                 type="text"
