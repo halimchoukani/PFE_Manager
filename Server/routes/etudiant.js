@@ -110,7 +110,6 @@ const storage = multer.diskStorage({
     cb(null, req.body.etudiant + path.extname(file.originalname));
   },
 });
-
 const upload = multer({ storage: storage });
 router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
   console.log(req.body);
@@ -170,6 +169,19 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+router.get("/isSubmited", async (req, res) => {
+  try {
+    const stages = await Stage.find({ id: req.body.id });
+    if (stages.length > 0) {
+      res.status(200).send(true);
+    }
+    res.status(200).send(false);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 router.get("/getfile/:cin", async (req, res) => {
   try {
     const cin = req.params.cin;
