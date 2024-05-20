@@ -1,7 +1,6 @@
-const { File } = require("buffer");
 const mongoose = require("mongoose");
-const { type } = require("os");
 const { Schema } = mongoose;
+
 const etudiantSchema = new Schema({
   nom: String,
   prenom: String,
@@ -10,7 +9,7 @@ const etudiantSchema = new Schema({
     unique: true,
     validate: {
       validator: function (value) {
-        return value.length == 8 && !isNaN(value); // Ensure length is 8 characters
+        return value.length == 8 && !isNaN(value);
       },
       message: "CIN doit contenir 8 chiffres",
     },
@@ -18,8 +17,7 @@ const etudiantSchema = new Schema({
   email: String,
   password: String,
   fichier: {
-    type: Buffer, // Store file as Buffer
-    contentType: String, // Store content type of the file
+    type: String,
   },
   classe: String,
   status: {
@@ -29,5 +27,7 @@ const etudiantSchema = new Schema({
   },
   room: String,
 });
+
 const Etudiant = mongoose.model("Etudiant", etudiantSchema);
+
 module.exports = Etudiant;
