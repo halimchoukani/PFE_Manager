@@ -30,8 +30,8 @@ export default function EtudiantRegister() {
   const [error, setError] = useState(false);
   async function Register(ev) {
     ev.preventDefault();
-    
-      const responce = await fetch("http://localhost:3001/etudiant/register", {
+
+    const responce = await fetch("http://localhost:3001/etudiant/register", {
       method: "POST",
       body: JSON.stringify({
         cin,

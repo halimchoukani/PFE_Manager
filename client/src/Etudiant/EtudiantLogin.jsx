@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { HomeLink } from "../HomeLink";
+
 export default function EtudiantLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -86,7 +87,11 @@ export default function EtudiantLogin() {
             size="lg"
           />
           <div className="-ml-2.5">
-            <Checkbox label="Remember Me" />
+            <Checkbox
+              label="Remember Me"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
           </div>
         </CardBody>
         <CardFooter className="pt-0">
