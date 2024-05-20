@@ -28,7 +28,7 @@ export default function EtudiantRegister() {
   const [redirect, setRedirect] = useState(false);
   const [cinerror, setCinError] = useState(false);
   const [error, setError] = useState(false);
-  async function register(ev) {
+  async function Register(ev) {
     ev.preventDefault();
     
       const responce = await fetch("http://localhost:3001/etudiant/register", {
@@ -46,7 +46,13 @@ export default function EtudiantRegister() {
       },
       credentials: "include",
     });
-    console.log(responce);
+    if(responce.ok){
+      responce.json().then((data) => {
+        console.log(data);
+      });}
+    else{
+      console.log("Invalid email or password");
+    }
     
   }
 

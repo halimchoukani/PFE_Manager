@@ -22,11 +22,11 @@ const upload = multer({ storage: storage, filename: customFilename });
 router.post("/register", async (req, res) => {
   try {
     const e = new Etudiant(req.body);
-
+    console.log(e);
     // Check if CIN exists
     const exist = await CINS.findOne({ cin: e.cin });
     if (!exist) {
-
+      console.log("CIN not found");
       return res
         .status(404)
         .send(
@@ -37,12 +37,15 @@ router.post("/register", async (req, res) => {
     // Check if CIN already exists
     const cinExists = await Etudiant.findOne({ cin: e.cin });
     if (cinExists) {
+      console.log("CIN already exists");
       return res.status(400).send("Etudiant déjà existant.");
     }
 
     // Check if email already exists
     const emailExists = await Etudiant.findOne({ email: e.email });
     if (emailExists) {
+      console.log("email already exists");
+
       return res.status(400).send("Email déjà existant.");
     }
 
@@ -56,7 +59,7 @@ router.post("/register", async (req, res) => {
     res.status(201).send(e);
   } catch (error) {
     // Handle any errors that occur during registration
-    res.status(500).send(error.message);
+    res.status(500).send("fhzifuhzfioh");
   }
 });
 
