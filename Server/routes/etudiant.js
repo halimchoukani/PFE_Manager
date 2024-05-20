@@ -144,7 +144,9 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
       await stagebinome.save();
     }
     if (stage) {
-      et.fichier = filePath;
+      if (filePath != "") {
+        et.fichier = filePath;
+      }
       await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
       await Stage.findOneAndUpdate(
         { etudiant: et.cin },
@@ -153,8 +155,10 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
       return res.status(200).send("Stage modifié avec succès");
     }
 
-    et.fichier = filePath;
-    await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
+    if (filePath != "") {
+      et.fichier = filePath;
+      await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
+    }
 
     stage = new Stage({ ...etudiant, fichier: filePath });
     if (etudiant.binome) {
