@@ -193,6 +193,32 @@ io.on("connection", (socket) => {
       callback("CIN existe déjà");
     }
   });
+
+  socket.on("getStageByCIN", async (data, callback) => {
+    const student = await Etudiant.findOne({ cin: data });
+    const stages = await Stage.findOne({ etudiant: student.cin });
+
+    const et = await Etudiant.findOne({ cin: stages.etudiant });
+    const file = et.fichier;
+    const stageswithfiles = {
+      _id: stages._id,
+      etudiant: et.cin,
+      status: stages.status,
+      nom: et.nom,
+      prenom: et.prenom,
+      email: et.email,
+      Binome: et.Binome,
+      fichier: file,
+      encadrant: stages.encadrant,
+      encadrant_entreprise: stages.encadrant_entreprise,
+      contact_enreprise: stages.contact_entreprise,
+      nom_entreprise: stages.nom_entreprise,
+      sujet: stages.sujet,
+      date_creation: stages.date_creation,
+    };
+
+    callback(stageswithfiles);
+  });
 });
 app.use("/admin", adminApi);
 app.use("/encadrant", encadrantApi);

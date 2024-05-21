@@ -122,7 +122,7 @@ export function FormulaireStage() {
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [EncadrantIset, setEncadrantIset] = useState("");
-
+  const [fileName, setFileName] = useState("");
   useEffect(() => {
     socket.emit("getStudents", (students) => {
       setStudents(students);
@@ -134,7 +134,24 @@ export function FormulaireStage() {
       setTeachers(teachers);
     });
   }, []);
-
+  useEffect(() => {
+    socket.emit("getStageByCIN", CIN, (stage) => {
+      console.log(stage);
+      if (stage) {
+        setCIN(stage.etudiant);
+        setEmail(stage.email);
+        setBinome(stage.Binome);
+        setEmailBinome(stage.email_binome);
+        setSujet(stage.sujet_stage);
+        setNomSociete(stage.nom_entreprise);
+        setEncadrantSociete(stage.encadrant_entreprise);
+        setEmailSociete(stage.contact_enreprise);
+        setEncadrantIset(stage.encadrant);
+        setFileName(stage.fichier);
+      }
+      console.log("Stage : ", stage);
+    });
+  }, []);
   async function AjouterStage(ev) {
     ev.preventDefault();
     if (!check) {
@@ -280,6 +297,11 @@ export function FormulaireStage() {
                 onChange={(e) => setEmailSociete(e.target.value)}
               />
               <FileUpload setFichierStage={setFichierStage} />
+              {fileName && (
+                <Typography color="gray" className="font-normal">
+                  {fileName}
+                </Typography>
+              )}
             </div>
           </div>
           <Checkbox

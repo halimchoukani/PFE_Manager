@@ -46,16 +46,18 @@ export default function EtudiantRegister() {
       },
       credentials: "include",
     });
-    if(responce.ok){
+    if (responce.ok) {
       responce.json().then((data) => {
         console.log(data);
-      });}
-    else{
+        setRedirect(true);
+      });
+    } else {
       console.log("Invalid email or password");
     }
-    
   }
-
+  if (redirect) {
+    return <Navigate to="/etudiant/login" />;
+  }
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <form method="post">
