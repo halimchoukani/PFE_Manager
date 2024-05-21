@@ -103,7 +103,7 @@ router.get("/getfile/:cin", async (req, res) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     // const uniqueSuffix = "Date.now() + " - " + Math.round(Math.random() * 1e9)";
@@ -176,11 +176,16 @@ router.get("/getfile/:cin", async (req, res) => {
     if (!etudiant) {
       return res.status(404).send("Etudiant not found");
     }
-    // Ensure that etudiant.fichier is not null before sending
     if (!etudiant.fichier) {
       return res.status(404).send("File not found for this student");
     }
-    res.sendFile(path.resolve(etudiant.fichier));
+    const filePath = "/uploads/" + etudiant.fichier;
+    console.log(filePath);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(500).send(err.message);
+      }
+    });
   } catch (error) {
     res.status(500).send(error.message);
   }

@@ -21,7 +21,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(express.static("uploads"));
 // Set up MongoDB connection
 mongoose.connect(
   "mongodb+srv://isetrades:pi2024@pfemanger.rfwett7.mongodb.net/?retryWrites=true&w=majority&appName=pfeManger"
@@ -196,28 +196,31 @@ io.on("connection", (socket) => {
 
   socket.on("getStageByCIN", async (data, callback) => {
     const student = await Etudiant.findOne({ cin: data });
-    const stages = await Stage.findOne({ etudiant: student.cin });
-
-    const et = await Etudiant.findOne({ cin: stages.etudiant });
+    const stages = await Stage.findOne({ etudiant: data });
+    const et = student;
     const file = et.fichier;
-    const stageswithfiles = {
-      _id: stages._id,
-      etudiant: et.cin,
-      status: stages.status,
-      nom: et.nom,
-      prenom: et.prenom,
-      email: et.email,
-      Binome: et.Binome,
-      fichier: file,
-      encadrant: stages.encadrant,
-      encadrant_entreprise: stages.encadrant_entreprise,
-      contact_enreprise: stages.contact_entreprise,
-      nom_entreprise: stages.nom_entreprise,
-      sujet: stages.sujet,
-      date_creation: stages.date_creation,
-    };
+    if (stages) {
+      const stageswithfiles = {
+        _id: stages._id,
+        etudiant: et.cin,
+        status: stages.status,
+        nom: et.nom,
+        prenom: et.prenom,
+        email: et.email,
+        Binome: et.Binome,
+        fichier: file,
+        encadrant: stages.encadrant,
+        encadrant_entreprise: stages.encadrant_entreprise,
+        contact_enreprise: stages.contact_entreprise,
+        nom_entreprise: stages.nom_entreprise,
+        sujet: stages.sujet,
+        date_creation: stages.date_creation,
+      };
 
-    callback(stageswithfiles);
+      callback(stageswithfiles);
+    } else {
+      callback("Aucun stage trouvé pour cet étudiant");
+    }
   });
 });
 app.use("/admin", adminApi);

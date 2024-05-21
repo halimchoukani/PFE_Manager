@@ -10,9 +10,8 @@ import {
   Textarea,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { io } from "socket.io-client";
-
 const socket = io.connect("http://localhost:3001");
 
 function BinomeSelect({ students, setBinome }) {
@@ -136,8 +135,7 @@ export function FormulaireStage() {
   }, []);
   useEffect(() => {
     socket.emit("getStageByCIN", CIN, (stage) => {
-      console.log(stage);
-      if (stage) {
+      if (stage != "Aucun stage trouvé pour cet étudiant") {
         setCIN(stage.etudiant);
         setEmail(stage.email);
         setBinome(stage.Binome);
@@ -149,7 +147,6 @@ export function FormulaireStage() {
         setEncadrantIset(stage.encadrant);
         setFileName(stage.fichier);
       }
-      console.log("Stage : ", stage);
     });
   }, []);
   async function AjouterStage(ev) {
@@ -299,7 +296,9 @@ export function FormulaireStage() {
               <FileUpload setFichierStage={setFichierStage} />
               {fileName && (
                 <Typography color="gray" className="font-normal">
-                  {fileName}
+                  <Link to={"/filepreview/" + CIN}>
+                    See Your File : {fileName}
+                  </Link>{" "}
                 </Typography>
               )}
             </div>

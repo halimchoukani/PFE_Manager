@@ -12,6 +12,7 @@ import TableauFichePfe from "./Enseignant/TableauFichePfe";
 import Etudiants from "./Etudiant/Etudiants";
 import Encadrants from "./Enseignant/Encadrants";
 import EnseignantLogin from "./Enseignant/EnseignantLogin";
+import { FilePreview } from "./Etudiant/FilePreview";
 
 const socket = io.connect("http://localhost:3001");
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/encadrant" element={<TableauFichePfe />} />
         <Route path="/etudiant/login" element={<EtudiantLogin />} />
         <Route path="/encadrant/login" element={<EnseignantLogin />} />
+        <Route path="/filepreview/:id" element={<FilePreview />} />
       </Routes>
     </>
   );
