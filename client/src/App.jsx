@@ -32,7 +32,7 @@ function App() {
         <Route path="/etudiant" element={<FormulaireStage />} />
         <Route path="/encadrant" element={<TableauFichePfe />} />
         <Route path="/etudiant/login" element={<EtudiantLogin />} />
-        <Route path="/encadrant/login" element={<EnseignantLogin />} />
+        {/* <Route path="/encadrant/login" element={<EnseignantLogin />} /> */}
       </Routes>
     </>
   );
