@@ -39,7 +39,7 @@ export default function Encadrants() {
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        {teachers.length > 0 && tloading == true ? (
+        {teachers.length > 0 ? (
           <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
@@ -129,12 +129,8 @@ export default function Encadrants() {
               ))}
             </tbody>
           </table>
-        ) : tloading == true ? (
-          <Typography className="m-4 text-center">Loading ....</Typography>
         ) : (
-          <Typography className="m-4 text-center">
-            No data available.
-          </Typography>
+          <Typography className="m-4 text-center">Loading ....</Typography>
         )}
       </div>
     </CardBody>

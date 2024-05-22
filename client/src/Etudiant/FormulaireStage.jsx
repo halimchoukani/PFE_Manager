@@ -296,9 +296,9 @@ export function FormulaireStage() {
               <FileUpload setFichierStage={setFichierStage} />
               {fileName && (
                 <Typography color="gray" className="font-normal">
-                  <Link to={"/filepreview/" + CIN}>
+                  <a href={"/filepreview/" + CIN} target="_blank">
                     See Your File : {fileName}
-                  </Link>{" "}
+                  </a>{" "}
                 </Typography>
               )}
             </div>

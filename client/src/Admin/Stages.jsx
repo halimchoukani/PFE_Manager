@@ -37,7 +37,6 @@ export default function Stages() {
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
-                  <th className="p-4 border-b border-blue-gray-50">ID</th>
                   <th className="p-4 border-b border-blue-gray-50">Stage</th>
                   <th className="p-4 border-b border-blue-gray-50">Etudiant</th>
                   <th className="p-4 border-b border-blue-gray-50">Classe</th>
@@ -59,17 +58,7 @@ export default function Stages() {
               <tbody>
                 {data.map((item) => (
                   <tr key={item._id}>
-                    <td className="p-4 border-b border-blue-gray-50">
-                      <div className="flex items-center gap-3">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-bold"
-                        >
-                          {item._id}
-                        </Typography>
-                      </div>
-                    </td>
+
                     <td className="p-4 border-b border-blue-gray-50">
                       <div className="flex items-center gap-3">
                         <Typography
