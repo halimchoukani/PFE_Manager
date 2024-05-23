@@ -1,6 +1,6 @@
 import { React, useState, createElement, Fragment } from "react";
 import { Dialog } from "@headlessui/react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import {
   Navbar,
@@ -62,6 +62,7 @@ const navListMenuItems = [
     icon: Bars4Icon,
   },
 ];
+
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

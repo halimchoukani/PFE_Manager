@@ -2,31 +2,24 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const multer = require("multer");
 
 const Etudiant = require("../models/etudiant");
 const CINS = require("../models/cin");
 const secretKey = "gozgjzgpojzrpojz";
 const Stage = require("../models/stage");
 
-// Multer configuration
-const storage = multer.memoryStorage();
-
-// Custom filename function to use the Cin as the filename
-const customFilename = (req, file, cb) => {
-  cb(null, req.body.etudiant);
-};
-const upload = multer({ storage: storage, filename: customFilename });
+const multer = require("multer");
+const path = require("path");
 
 // Register Etudiant
 router.post("/register", async (req, res) => {
   try {
     const e = new Etudiant(req.body);
-
+    console.log(e);
     // Check if CIN exists
     const exist = await CINS.findOne({ cin: e.cin });
     if (!exist) {
-
+      console.log("CIN not found");
       return res
         .status(404)
         .send(
@@ -37,12 +30,15 @@ router.post("/register", async (req, res) => {
     // Check if CIN already exists
     const cinExists = await Etudiant.findOne({ cin: e.cin });
     if (cinExists) {
+      console.log("CIN already exists");
       return res.status(400).send("Etudiant déjà existant.");
     }
 
     // Check if email already exists
     const emailExists = await Etudiant.findOne({ email: e.email });
     if (emailExists) {
+      console.log("email already exists");
+
       return res.status(400).send("Email déjà existant.");
     }
 
@@ -56,7 +52,7 @@ router.post("/register", async (req, res) => {
     res.status(201).send(e);
   } catch (error) {
     // Handle any errors that occur during registration
-    res.status(500).send(error.message);
+    res.status(500).send("fhzifuhzfioh");
   }
 });
 
@@ -75,7 +71,13 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ id: etudiant._id }, secretKey, {
       expiresIn: "24h",
     });
-    res.send({ token });
+    res.send({
+      token,
+      cin: etudiant.cin,
+      nom: etudiant.nom,
+      prenom: etudiant.prenom,
+      email: etudiant.email,
+    });
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -98,8 +100,19 @@ router.get("/getfile/:cin", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
-// Create Stage PFE
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    // const uniqueSuffix = "Date.now() + " - " + Math.round(Math.random() * 1e9)";
+    cb(null, req.body.etudiant + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
 router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
+  console.log(req.body);
   try {
     const etudiant = req.body;
     const et = await Etudiant.findOne({ cin: etudiant.etudiant });
@@ -111,26 +124,68 @@ router.post("/ajouterstage", upload.single("fichier"), async (req, res) => {
     if (!binome && etudiant.Binome != "") {
       return res.status(404).send("Binome n'existe pas");
     }
+
     let stage = await Stage.findOne({ etudiant: et.cin });
+    const filePath = req.file ? req.file.path : "";
+    if (binome) {
+      let stagebinome = new Stage();
+      stagebinome.etudiant = binome.cin;
+      stagebinome.email = binome.email;
+      stagebinome.Binome = et.cin;
+      stagebinome.email_binome = et.email;
+      stagebinome.classe_binome = binome.classe;
+      stagebinome.classe = binome.classe;
+      stagebinome.nom_entreprise = etudiant.nom_entreprise;
+      stagebinome.sujet_stage = etudiant.sujet_stage;
+      stagebinome.date_creation = Date.now();
+      stagebinome.encadrant = etudiant.encadrant;
+      stagebinome.encadrant_entreprise = etudiant.encadrant_entreprise;
+      await stagebinome.save();
+    }
     if (stage) {
-      et.fichier = req.file.buffer.toString("base64");
+      if (filePath != "") {
+        et.fichier = filePath;
+      }
       await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
       await Stage.findOneAndUpdate(
         { etudiant: et.cin },
-        { binome: binome ? binome.cin : "" },
-        new Stage(etudiant)
+        { binome: binome ? binome.cin : "", ...etudiant }
       );
       return res.status(200).send("Stage modifié avec succès");
     }
-    et.fichier = req.file.buffer.toString("base64");
-    console.log(et);
-    await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
-    stage = new Stage(etudiant);
+
+    if (filePath != "") {
+      et.fichier = filePath;
+      await Etudiant.findOneAndUpdate({ cin: etudiant.etudiant }, et);
+    }
+
+    stage = new Stage({ ...etudiant, fichier: filePath });
     if (etudiant.binome) {
       stage.binome = binome._id;
     }
     await stage.save();
     res.status(201).send("Stage ajouté avec succès");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+router.get("/getfile/:cin", async (req, res) => {
+  try {
+    const cin = req.params.cin;
+    const etudiant = await Etudiant.findOne({ cin: cin });
+    if (!etudiant) {
+      return res.status(404).send("Etudiant not found");
+    }
+    if (!etudiant.fichier) {
+      return res.status(404).send("File not found for this student");
+    }
+    const filePath = "/uploads/" + etudiant.fichier;
+    console.log(filePath);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(500).send(err.message);
+      }
+    });
   } catch (error) {
     res.status(500).send(error.message);
   }

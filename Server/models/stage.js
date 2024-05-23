@@ -2,8 +2,10 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const stage = new Schema({
   etudiant: String,
+  email: String,
   classe: String,
   Binome: String,
+  email_binome: String,
   classe_binome: String,
   status: {
     type: String,

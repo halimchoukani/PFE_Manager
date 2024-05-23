@@ -11,14 +11,16 @@ import {
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { HomeLink } from "../HomeLink";
+
 export default function EtudiantLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   async function login(ev) {
     ev.preventDefault();
-    const responce = await fetch("http://localhost:3001/etudiant/login", {
+    const response = await fetch("http://localhost:3001/etudiant/login", {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -29,18 +31,31 @@ export default function EtudiantLogin() {
       },
       credentials: "include",
     });
-    if (responce.ok) {
-      responce.json().then((data) => {
+    if (response.ok) {
+      response.json().then((data) => {
+        if (rememberMe) {
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ data, role: "etudiant" })
+          );
+        } else {
+          sessionStorage.setItem(
+            "user",
+            JSON.stringify({ data, role: "etudiant" })
+          );
+        }
         setRedirect(true);
       });
     } else {
       console.log("Invalid email or password");
+      setError("Invalid email or password");
     }
   }
-  if (redirect) {
-    return <Navigate to="/" />;
-  }
 
+  // Conditionally render Navigate component to perform redirection
+  if (redirect) {
+    return <Navigate to="/etudiant" />;
+  }
   return (
     <div className="w-full h-screen flex justify-center items-center flex-col">
       <Card className="w-96">
@@ -82,11 +97,15 @@ export default function EtudiantLogin() {
             size="lg"
           />
           <div className="-ml-2.5">
-            <Checkbox label="Remember Me" />
+            <Checkbox
+              label="Remember Me"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
           </div>
         </CardBody>
         <CardFooter className="pt-0">
-          <Button variant="gradient" fullWidth>
+          <Button variant="gradient" fullWidth onClick={login}>
             Login
           </Button>
           <Typography variant="small" className="mt-6 flex justify-center">

@@ -18,7 +18,7 @@ export default function enseignantLogin() {
   const [error, setError] = useState("");
   async function login(ev) {
     ev.preventDefault();
-    const responce = await fetch("http://localhost:3001/enseignant/login", {
+    const responce = await fetch("http://localhost:3001/encadrant/login", {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -31,14 +31,11 @@ export default function enseignantLogin() {
     });
     if (responce.ok) {
       responce.json().then((data) => {
-        setRedirect(true);
+        console.log(data);
       });
     } else {
       console.log("Invalid email or password");
     }
-  }
-  if (redirect) {
-    return <Navigate to="/" />;
   }
 
   return (
@@ -86,15 +83,9 @@ export default function enseignantLogin() {
           </div>
         </CardBody>
         <CardFooter className="pt-0">
-          <Button variant="gradient" fullWidth>
+          <Button variant="gradient" fullWidth onClick={login}>
             Login
           </Button>
-          <Typography variant="small" className="mt-6 flex justify-center">
-            n&apos;a pas de compte ?
-            <Link to="/enseignant/register" className="ml-1 font-bold">
-              Enregistrer
-            </Link>
-          </Typography>
           <HomeLink />
         </CardFooter>
       </Card>
