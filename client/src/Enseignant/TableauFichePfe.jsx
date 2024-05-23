@@ -45,16 +45,48 @@ const TableauFichePfe = () => {
     URL.revokeObjectURL(url);
   }
 
-  function handleDelete(id) {
-    // Logic to delete an item
-    // This function should include API calls to delete the item from the database and update the state
-    console.log("Delete item with ID:", id);
+  async function handleDelete(id) {
+    try {
+      const response = await fetch(`http://localhost:3001/etudiant/delete/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete item");
+      }
+      // Remove the deleted item from the state
+      setData(data.filter(item => item._id !== id));
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
   }
 
-  function handleModify(id) {
-    
-    console.log("Modify item with ID:", id);
+  async function handleModify(id) {
+    const newName = prompt("Enter the new name for the student:");
+    if (!newName) {
+      return; // Exit if no new name is provided
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3001/etudiant/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ etudiantNom: newName }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update item");
+      }
+
+      const updatedItem = await response.json();
+      // Update the item in the state
+      setData(data.map(item => (item._id === id ? updatedItem : item)));
+    } catch (error) {
+      console.error("Error updating item:", error);
+    }
   }
+
 
   useEffect(() => {
     getStage();
