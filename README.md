@@ -6,7 +6,7 @@
 <a href="#started">Getting Started</a>
 <a href="#colab">Collaborators</a>
 </p>
-
+<img src="https://github.com/halimchoukani/PFE_Manager/blob/main/image_2024-10-02_155259849.png" />
 
 
 
