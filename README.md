@@ -10,7 +10,7 @@
 
 <h2 id="about">🔎About the project</h2>
 
-<p>Le projet consiste à développer une application web permettant de gérer l'intégralité du processus d'inscription des étudiants pour le stage PFE. L'objectif principal de cette application est de simplifier et automatiser les étapes administratives liées à l'inscription, tout en assurant une gestion efficace des informations des étudiants, des entreprises partenaires, et des encadrants académiques.</p>
+<p>The project involves developing a web application that manages the entire student registration process for the PFE (Final Year Project) internship. The primary goal of this application is to simplify and automate the administrative steps related to registration, while ensuring efficient management of information for students, partner companies, and academic supervisors.</p>
 
 <h2 id="technologies">💻 Technologies</h2>
 
