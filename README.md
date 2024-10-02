@@ -12,7 +12,7 @@
 
 <p>The project involves developing a web application that manages the entire student registration process for the PFE (Final Year Project) internship. The primary goal of this application is to simplify and automate the administrative steps related to registration, while ensuring efficient management of information for students, partner companies, and academic supervisors.</p>
 
-<h2 id="technologies">💻 Technologies</h2>
+<h2 id="tech">💻 Technologies</h2>
 
 - MERN
 - Tailwind CSS
