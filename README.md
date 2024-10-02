@@ -2,6 +2,7 @@
 <h1 align="center" style="font-weight: bold;">PFE Manager 💻</h1>
 
 <p align="center">
+<a href="#about">About</a>
 <a href="#tech">Technologies</a>
 <a href="#started">Getting Started</a>
 <a href="#colab">Collaborators</a>
