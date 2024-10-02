@@ -8,8 +8,9 @@
 </p>
 <img src="https://github.com/halimchoukani/PFE_Manager/blob/main/image_2024-10-02_155259849.png" />
 
+<h2 id="about">🔎About the project</h2>
 
-
+<p>Le projet consiste à développer une application web permettant de gérer l'intégralité du processus d'inscription des étudiants pour le stage PFE. L'objectif principal de cette application est de simplifier et automatiser les étapes administratives liées à l'inscription, tout en assurant une gestion efficace des informations des étudiants, des entreprises partenaires, et des encadrants académiques.</p>
 
 <h2 id="technologies">💻 Technologies</h2>
 
